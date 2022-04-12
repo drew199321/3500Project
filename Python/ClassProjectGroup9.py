@@ -4,7 +4,7 @@
 # PYTHON IMPLEMENTATION: BASIC DATA ANALYSIS
 # Date: 04/7/2022
 # Student 1: Zachary Scholefield
-# Student 2: Clemente Rodriguez
+# Student 2: Clemente Rodriguez Jr
 # Student 4: Andrew Manz
 # Student 4: Scott Kurtz
 # Description: Implementation Basic Data Analysys Routines
