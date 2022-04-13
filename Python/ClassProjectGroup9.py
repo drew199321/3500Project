@@ -45,6 +45,10 @@ dropRowsDistance = df.drop(df.loc[df['Distance(mi)'] == 0].index)
 # df['End_Time'] = pd.to_datetime(df['End_Time'])
 
 
+dropDuplicate = df[df['Start_Time'] != df['End_Time']]
+
+
+
 print(dropRowsSingle, dropRowsTriple, dropRowsDistance)
 
 # Only consider the first 5 digits of zipcode
@@ -54,3 +58,5 @@ print(zipCoder[21])
 
                 
 print ("DONE!")
+
+
