@@ -18,7 +18,7 @@ print("Loading and cleaning input data set:")
 print("************************************")
 # Dataset = pd.read_csv("./Datasets/InputDataSample.csv")
 print('[', datetime.now(), '] Starting Script')
-print('[', datetime.now(), '] Loading US_Accidents_data.csv')
+# print('[', datetime.now(), '] Loading US_Accidents_data.csv')
 
 # Read CSV file
 # Dataset = pd.read_csv("./Datasets/testing.csv")
@@ -36,20 +36,19 @@ dropRowsSingle = df.dropna(subset=['ID', 'Severity', 'Zipcode', 'Start_Time',
 'End_Time', 'Visibility(mi)', 'Weather_Condition', 'Country'], inplace=True) 
 
 # Drop Rows missing 3 columns
-dropRowsTriple = df.dropna(thresh=len(df.columns)-3, inplace=True)
+dropRowsTriple = df.dropna(thresh=len(df.columns)-2, inplace=True)
 
 # Drop Rows where Distance = 0
-dropRowsDistance = df.drop(df.loc[df['Distance(mi)'] == 0].index)
+df = df.drop(df.loc[df['Distance(mi)'] == 0].index)
 
 # df['Start_Time'] = pd.to_datetime(df['Start_Time'])
 # df['End_Time'] = pd.to_datetime(df['End_Time'])
 
 
-dropDuplicate = df[df['Start_Time'] != df['End_Time']]
+# df = df[df['Start_Time'] != df['End_Time']]
 
 
-
-print(dropRowsSingle, dropRowsTriple, dropRowsDistance)
+print(df)
 
 # Only consider the first 5 digits of zipcode
 zipCoder = df['Zipcode'].str[:5]
@@ -57,6 +56,29 @@ zipCoder = df['Zipcode'].str[:5]
 print(zipCoder[21])
 
                 
-print ("DONE!")
+print ("CLEANING IS COMPLETE")
+
+############################################################################
+# OUTPUT PROMPTS
+############################################################################
+
+# PROMPT 1: In what month were there more accidents reported?
+print("Prompt 1")
+months = df['month'] = pd.DatetimeIndex(df['Start_Time']).month
+print(months.value_counts().head(1))
+
+#PROMPT 2: What is the state that had the most accidents in 2020?
+print("Prompt 2")
+years = df['years'] = pd.DatetimeIndex(df['Start_Time']).year
+acc2020 = df[years == 2020]
+
+state2020 = acc2020['State'].value_counts().head(1)
+print(state2020)
+
+#PROMPT 3: What is the state that had the most accidents of severity 2 in 2021?
+print("Prompt 3")
+acc2021 = df[years == 2021]
+severity2 = acc2021['Severity'] == 2
+print(severity2)
 
 
