@@ -2,7 +2,24 @@
 #! Partially require just CSV Importer
 require 'rubygems'
 require 'daru'
-# I do not  iknow what I can require for ruby to understand daru. 
-# It currently has a name error stating daru is an uninitialized variable 
-df = DARU::DataFrame.new(
-Daru::DataFrame.from_csv("US_Accidents_data.csv")
+
+# Clean Values
+df = Daru::DataFrame.from_csv("US_Accidents_data.csv")
+print df.size
+print "\n"
+   # Immeditately drop rows where certain attributes aren't present
+   df = df.where(!df['ID'].eq(nil))
+   df = df.where(!df['Severity'].eq(nil))
+   df = df.where(!df['Zipcode'].eq(nil))
+   df = df.where(!df['Start_Time'].eq(nil))
+   df = df.where(!df['End_Time'].eq(nil))
+   df = df.where(!df['Visibility(mi)'].eq(nil))
+   df = df.where(!df['Country'].eq(nil))  
+print df.size
+print "\n"
+
+
+
+
+
+
