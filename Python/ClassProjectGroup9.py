@@ -21,8 +21,8 @@ print('[', datetime.now(), '] Starting Script')
 # print('[', datetime.now(), '] Loading US_Accidents_data.csv')
 
 # Read CSV file
-Dataset = pd.read_csv("./Datasets/testing.csv")
-# Dataset = pd.read_csv("./Datasets/US_Accidents_data.csv")
+# Dataset = pd.read_csv("./Datasets/testing.csv")
+Dataset = pd.read_csv("./Datasets/US_Accidents_data.csv")
 df = pd.DataFrame(Dataset)
 # df.isnull()
 # Dataset = pd.read_csv("./Datasets/Loading US_Accidents_data.csv")
@@ -62,27 +62,27 @@ print ("CLEANING IS COMPLETE")
 ############################################################################
 
 # PROMPT 1: In what month were there more accidents reported?
-print("Prompt 1")
+# print("Prompt 1")
 months = df['month'] = pd.DatetimeIndex(df['Start_Time']).month
-print(months.value_counts().head(1))
+# print(months.value_counts().head(1))
 
 # PROMPT 2: What is the state that had the most accidents in 2020?
-print("Prompt 2")
+# print("Prompt 2")
 years = df['years'] = pd.DatetimeIndex(df['Start_Time']).year
-acc2020 = df[years == 2020]
+# acc2020 = df[years == 2020]
 
-state2020 = acc2020['State'].value_counts().head(1)
-print(state2020)
+# state2020 = acc2020['State'].value_counts().head(1)
+# print(state2020)
 
 # PROMPT 3: What is the state that had the most accidents of severity 2 in 2021?
-print("Prompt 3")
-acc2021 = df[years == 2021]
-severity2 = acc2021['Severity'] == 2
-print(type(severity2))
-print(type(acc2021))
+# print("Prompt 3")
+# acc2021 = df[years == 2021]
+# severity2 = acc2021['Severity'] == 2
+# print(type(severity2))
+# print(type(acc2021))
 
-state1 = acc2021[severity2]
-state2 = state1['State']
+# state1 = acc2021[severity2]
+# state2 = state1['State']
 # state2 = severity2[acc2021]
 # print(acc2021)
 # print(severity2)
@@ -92,13 +92,19 @@ state2 = state1['State']
 
 
 # PROMPT 4 What severity is the most common in Virginia?
-print("Prompt 4")
-stateVirginia = df['State'] == "VA"
-virginiaColumns = df[stateVirginia]
-virginiaSeverity = virginiaColumns['Severity'].value_counts().head()
-print(virginiaColumns)
-print(virginiaSeverity)
-print(df)
+# print("Prompt 4")
+# stateVirginia = df['State'] == "VA"
+# virginiaColumns = df[stateVirginia]
+# virginiaSeverity = virginiaColumns['Severity'].value_counts().head()
+# print(virginiaColumns)
+# print(virginiaSeverity)
+# print(df)
 
 # PROMPT 5 What are the 5 cities that had the most accidents in 2019 in California?
-print("Prompt 4")
+print("Prompt 5")
+stateCalifornia = df['State'] == "CA"
+acc2019 = df[years == 2019]
+print(acc2019)
+caliAccidents2019 = acc2019[stateCalifornia]
+print(caliAccidents2019)
+
