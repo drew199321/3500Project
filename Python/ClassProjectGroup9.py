@@ -10,7 +10,9 @@
 # Description: Implementation Basic Data Analysys Routines
 ############################################################################
 
+from asyncio.windows_events import NULL
 import csv
+from numpy import average
 import pandas as pd
 from datetime import datetime
 
@@ -50,6 +52,7 @@ df = df[df['Start_Time'] != df['End_Time']]
 
 
 # # Only consider the first 5 digits of zipcode
+
 # zipCoder = df['Zipcode'].str[:5]
 # # Tested with index 21 with zipcode: 41033-9698; output: 41033
 # print(zipCoder[21])
@@ -61,12 +64,12 @@ print ("CLEANING IS COMPLETE")
 # OUTPUT PROMPTS
 ############################################################################
 
-# PROMPT 1: In what month were there more accidents reported?
+# 1. In what month were there more accidents reported?
 print("Prompt 1")
 months = df['month'] = pd.DatetimeIndex(df['Start_Time']).month
 print(months.value_counts().head(1))
 
-# PROMPT 2: What is the state that had the most accidents in 2020?
+# 2. What is the state that had the most accidents in 2020?
 print("Prompt 2")
 years = df['years'] = pd.DatetimeIndex(df['Start_Time']).year
 acc2020 = df[years == 2020]
@@ -74,7 +77,7 @@ acc2020 = df[years == 2020]
 state2020 = acc2020['State'].value_counts().head(1)
 print(state2020)
 
-# PROMPT 3: What is the state that had the most accidents of severity 2 in 2021?
+# 3. What is the state that had the most accidents of severity 2 in 2021?
 print("Prompt 3")
 acc2021 = df[years == 2021]
 severity2 = acc2021['Severity'] == 2
@@ -91,7 +94,7 @@ print(state2)
 # print(df)
 
 
-# PROMPT 4 What severity is the most common in Virginia?
+# 4. What severity is the most common in Virginia?
 print("Prompt 4")
 stateVirginia = df['State'] == "VA"
 virginiaColumns = df[stateVirginia]
@@ -100,7 +103,7 @@ virginiaSeverity = virginiaColumns['Severity'].value_counts().head()
 print(virginiaSeverity)
 # print(df)
 
-# PROMPT 5 What are the 5 cities that had the most accidents in 2019 in California?
+# 5. What are the 5 cities that had the most accidents in 2019 in California?
 print("Prompt 5")
 stateCalifornia = df['State'] == "CA"
 acc2019 = df[years == 2019]
@@ -109,3 +112,19 @@ caliAccidents2019 = acc2019[stateCalifornia]
 topCaliforniaCities = caliAccidents2019['City'].value_counts().head() 
 print(topCaliforniaCities)
 
+# 6. What was the average humidity and average temperature of all accidents of 
+# severity 4 that occurred in 2021?
+print("Prompt 6")
+
+# Severity of 4
+severityFour = df['Severity'] == 4
+# Severity of 4 in 2021
+yearAndSeverity = acc2021[severityFour]
+# Humidity of severity 4 accidents in 2021
+humiditySevFour = yearAndSeverity['Humidity(%)']
+# Temperature of severity 4 accidents in 2021
+tempSevFour = yearAndSeverity['Temperature(F)']
+
+# average temperature and humidity for accidents w/ a severity of 4 in 2021
+print('average humidity: ', humiditySevFour.mean())
+print('average temp: ', tempSevFour.mean())
