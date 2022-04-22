@@ -121,10 +121,20 @@ severityFour = df['Severity'] == 4
 # Severity of 4 in 2021
 yearAndSeverity = acc2021[severityFour]
 # Humidity of severity 4 accidents in 2021
-humiditySevFour = yearAndSeverity['Humidity(%)']
+humiditySevFour = yearAndSeverity['Humidity(%)'].mean()
 # Temperature of severity 4 accidents in 2021
-tempSevFour = yearAndSeverity['Temperature(F)']
+tempSevFour = yearAndSeverity['Temperature(F)'].mean()
 
 # average temperature and humidity for accidents w/ a severity of 4 in 2021
-print('average humidity: ', humiditySevFour.mean())
-print('average temp: ', tempSevFour.mean())
+print('average humidity: ', humiditySevFour)
+print('average temp: ', tempSevFour)
+
+# 7. What are the 3 most common weather conditions (weather_conditions) when accidents occurred?
+print("Prompt 7")
+weatherConditions = df['Weather_Condition'].value_counts().head(3) 
+print(weatherConditions)
+
+# 8. What was the maximum visibility of all accidents of severity 2 that occurred in the state of New Hampshire?
+print("Prompt 8")
+
+
