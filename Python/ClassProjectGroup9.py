@@ -165,10 +165,10 @@ bakersfieldSev3 = len(tmpDF[severityBak3])
 bakersfieldSev4 = len(tmpDF[severityBak4])
 
 print(type(bakersfieldSev1))
-print(bakersfieldSev1)
-print(bakersfieldSev2)
-print(bakersfieldSev3)
-print(bakersfieldSev4)
+print("Accidents in Bakersfield with Severity 1: ", bakersfieldSev1)
+print("Accidents in Bakersfield with Severity 2: ", bakersfieldSev2)
+print("Accidents in Bakersfield with Severity 3: ", bakersfieldSev3)
+print("Accidents in Bakersfield with Severity 4: ", bakersfieldSev4)
 
 # 10 What was the longest accident (in hours) recorded in Florida in the Spring (March, April, and May) of 2022?
 print("Prompt 10")
