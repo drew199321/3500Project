@@ -23,8 +23,8 @@ print('[', datetime.now(), '] Starting Script')
 # print('[', datetime.now(), '] Loading US_Accidents_data.csv')
 
 # Read CSV file
-# Dataset = pd.read_csv("./Datasets/testing.csv")
-Dataset = pd.read_csv("./Datasets/US_Accidents_data.csv")
+Dataset = pd.read_csv("./Datasets/testing.csv")
+# Dataset = pd.read_csv("./Datasets/US_Accidents_data.csv")
 df = pd.DataFrame(Dataset)
 # df.isnull()
 # Dataset = pd.read_csv("./Datasets/Loading US_Accidents_data.csv")
@@ -136,5 +136,24 @@ print(weatherConditions)
 
 # 8. What was the maximum visibility of all accidents of severity 2 that occurred in the state of New Hampshire?
 print("Prompt 8")
+stateNewHampshire = df['State'] == "NH"
+tempDF = df[stateNewHampshire]
+severity = df['Severity'] == 2
+stateSeverity = tempDF[severity]
+visibility = stateSeverity['Visibility(mi)'].max()
+# print(df)
+print(visibility)
+
+# 9. How many accidents of each severity were recorded in Bakersfield?
+print("Prompt 9")
+
+
+
+
+
+
+
+
+# print(stateNewHampshire)
 
 
