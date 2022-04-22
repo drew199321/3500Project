@@ -173,5 +173,10 @@ print("Accidents in Bakersfield with Severity 4: ", bakersfieldSev4)
 # 10 What was the longest accident (in hours) recorded in Florida in the Spring (March, April, and May) of 2022?
 print("Prompt 10")
 
+stateFlorida = df['State'] == 'FL'
+floridaColumns = df[stateFlorida]
+acc2022 = df[years == 2022]
+
+
 
 
