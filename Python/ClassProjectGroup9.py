@@ -23,8 +23,8 @@ print('[', datetime.now(), '] Starting Script')
 # print('[', datetime.now(), '] Loading US_Accidents_data.csv')
 
 # Read CSV file
-Dataset = pd.read_csv("./Datasets/testing.csv")
-# Dataset = pd.read_csv("./Datasets/US_Accidents_data.csv")
+# Dataset = pd.read_csv("./Datasets/testing.csv")
+Dataset = pd.read_csv("./Datasets/US_Accidents_data.csv")
 df = pd.DataFrame(Dataset)
 # df.isnull()
 # Dataset = pd.read_csv("./Datasets/Loading US_Accidents_data.csv")
@@ -146,14 +146,32 @@ print(visibility)
 
 # 9. How many accidents of each severity were recorded in Bakersfield?
 print("Prompt 9")
+bakersfield = df['City'] == "Bakersfield"
+severityBak1 = df['Severity'] == 1
+severityBak2 = df['Severity'] == 2
+severityBak3 = df['Severity'] == 3
+severityBak4 = df['Severity'] == 4
 
+tmpDF = df[bakersfield]
 
+print(df)
+print(severityBak1)
+print(type(severityBak1))
+print(type(tmpDF))
 
+bakersfieldSev1 = len(tmpDF[severityBak1])
+bakersfieldSev2 = len(tmpDF[severityBak2])
+bakersfieldSev3 = len(tmpDF[severityBak3])
+bakersfieldSev4 = len(tmpDF[severityBak4])
 
+print(type(bakersfieldSev1))
+print(bakersfieldSev1)
+print(bakersfieldSev2)
+print(bakersfieldSev3)
+print(bakersfieldSev4)
 
+# 10 What was the longest accident (in hours) recorded in Florida in the Spring (March, April, and May) of 2022?
+print("Prompt 10")
 
-
-
-# print(stateNewHampshire)
 
 
