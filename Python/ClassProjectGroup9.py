@@ -16,6 +16,7 @@ from numpy import average
 import pandas as pd
 from datetime import datetime
 
+
 print("Loading and cleaning input data set:")
 print("************************************")
 # Dataset = pd.read_csv("./Datasets/InputDataSample.csv")
@@ -71,14 +72,14 @@ def processData():
     df['End_Time'] = pd.to_datetime(df['End_Time'])
     df = df[df['Start_Time'] != df['End_Time']]
 
-# # Only consider the first 5 digits of zipcode
-# zipCoder = df['Zipcode'].str[:5]
-# # Tested with index 21 with zipcode: 41033-9698; output: 41033
-# print(zipCoder[21])
+    # # Only consider the first 5 digits of zipcode
+    # zipCoder = df['Zipcode'].str[:5]
+    # # Tested with index 21 with zipcode: 41033-9698; output: 41033
+    # print(zipCoder[21])
     print ("CLEANING IS COMPLETE")
-#**************************************
-# starting functions that answer the questions
-# 1. In what month were there more accidents reported?
+    #**************************************
+    # starting functions that answer the questions
+    # 1. In what month were there more accidents reported?
 def prompt1():
     print("Prompt 1")
     months = df['month'] = pd.DatetimeIndex(df['Start_Time']).month
@@ -134,7 +135,8 @@ def prompt5():
 # severity 4 that occurred in 2021?
 def prompt6():
     print("Prompt 6")
-
+    years = df['years'] = pd.DatetimeIndex(df['Start_Time']).year
+    acc2021 = df[years == 2021]
     # Severity of 4
     severityFour = df['Severity'] == 4
     # Severity of 4 in 2021
@@ -194,12 +196,11 @@ def prompt9():
     print("Accidents in Bakersfield with Severity 4: ", bakersfieldSev4)
 
 # 10 What was the longest accident (in hours) recorded in Florida in the Spring (March, April, and May) of 2022?
-def prompt10():
-    print("Prompt 10")
-
-    stateFlorida = df['State'] == 'FL'
-    floridaColumns = df[stateFlorida]
-    acc2022 = df[years == 2022]
+# def prompt10():
+#     print("Prompt 10")
+#     stateFlorida = df['State'] == 'FL'
+#     floridaColumns = df[stateFlorida]
+#     acc2022 = df[years == 2022]
 
 #**************************************
 # end of functions for the promps/questions, 
@@ -208,11 +209,11 @@ def prompt10():
 def searchByCity ():
     print("searching for city")
 
-    def searchByState():
+def searchByState():
     print("Searching by state")
 
-    def searchByZip():
-        print ("searching by zip code")
+def searchByZip():
+    print ("searching by zip code")
 
         # associated with choice 5
 def searchByYear():
@@ -243,7 +244,7 @@ def printAnswers():
     prompt7()
     prompt8()
     prompt9()
-    prompt10()
+    # prompt10()
 
 def searchAccidentsPlace():
     exit = False
@@ -255,20 +256,20 @@ def searchAccidentsPlace():
         print("4: Exit this menu") 
         choice = input()
         if(choice =='1'):
-                searchByCity()
-                return False
-    if(choice =='2'):
+            searchByCity()
+            return False
+        if(choice =='2'):
             searchByState()
             return False
-    if(choice =='3'):
+        if(choice =='3'):
             searchByZip()
             return False
-    if(choice =='4'):
+        if(choice =='4'):
             return True
-    else:
+        else:
             print("Error: Invalid input. Please try again.")
             return False
-exit = choice
+    exit = choice
 
     print("we will prompt user to choose place")
 
@@ -280,23 +281,23 @@ exit = choice
 
 def menu_selection(action):
     if(action =='1'):
-            df = loadData()
-            return False
+        df = loadData()
+        return False
     if(action =='2'):
-            cleanData= processData()
-            return False
+        processData()
+        return False
     if(action =='3'):
-            printAnswers()
-            return False
+        printAnswers()
+        return False
     if(action =='4'):
-            searchAccidentsPlace()
-            return False
-    if(action =='5'):
-            searchAccidentsTime()
-            return False
-    if(action =='6'):
-            searchAccidentsConditions()
-            return False
+        searchAccidentsPlace()
+        return False
+    # if(action =='5'):
+    #         searchAccidentsTime()
+    #         return False
+    # if(action =='6'):
+    #         searchAccidentsConditions()
+    #         return False
     if(action =='7'):
             return True
     else:
