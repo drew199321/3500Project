@@ -12,10 +12,9 @@
 
 # from asyncio.windows_events import NULL
 import csv
-from numpy import average, column_stack
+from numpy import average
 import pandas as pd
 from datetime import datetime
-
 
 
 print("Loading and cleaning input data set:")
@@ -40,11 +39,6 @@ df['Start_Time'] = pd.to_datetime(df['Start_Time'])
 df['End_Time'] = pd.to_datetime(df['End_Time'])
 df = df[df['Start_Time'] != df['End_Time']]
 
-
-
-
-
-
 ## Only consider the first 5 digits of zipcode
 # zipCoder = df['Zipcode'].str[:5]
 # # Tested with index 21 with zipcode: 41033-9698; output: 41033
@@ -53,23 +47,16 @@ print ("CLEANING IS COMPLETE")
 
 # function to reload data if that is what the user requests
 def loadData():
-    Dataset = pd.read_csv("./Datasets/US_Accidents_data11.csv")
-    if (Dataset.empty):
-        print("File is Empty. Please make sure US_Accidents_data.csv is in the current directory.")
-    else:
-        print("Loading and cleaning input data set:")
-        print("************************************")
-        # Dataset = pd.read_csv("./Datasets/InputDataSample.csv")
-        print('[', datetime.now(), '] Starting Script')
-        df = pd.DataFrame(Dataset)
-        return df
+    print("Loading and cleaning input data set:")
+    print("************************************")
+    # Dataset = pd.read_csv("./Datasets/InputDataSample.csv")
+    print('[', datetime.now(), '] Starting Script')
+    Dataset = pd.read_csv("./Datasets/US_Accidents_data.csv")
+    df = pd.DataFrame(Dataset)
+    return df
 
 # CLEAN DATA
 def processData():
-    global Dataset
-    if (Dataset.empty):
-        print("File is Empty. Please make sure US_Accidents_data.csv is in the " +
-            "current directory.")
     # Drop rows with missing data from any of the specified columns
     dropRowsSingle = df.dropna(subset=['ID', 'Severity', 'Zipcode', 'Start_Time',
     'End_Time', 'Visibility(mi)', 'Weather_Condition', 'Country'], inplace=True) 
@@ -276,7 +263,7 @@ def searchByTemp():
     print("Searching by temperature range")
 
 def searchByVision():
-    print("searching by visability range")
+    print("searching by visibility range")
 
 # end of search definitions 
 #**************************************
@@ -292,6 +279,10 @@ def printAnswers():
     prompt9()
     prompt10()
 
+
+
+
+#**************************************
 def searchAccidentsPlace():
     exit = False
     while(exit == False):
@@ -317,19 +308,54 @@ def searchAccidentsPlace():
             return False
     exit = choice
 
-    print("we will prompt user to choose place")
+def searchAccidentsTime():
+    exit = False
+    while(exit == False):
+        print("Please enter the number corresponding to your desired search:") 
+        print("1: Search by year")
+        print("2: Search by month")
+        print("3: Search by the day")
+        print("4: Exit this menu") 
+        choice = input()
+        if(choice =='1'):
+            searchByYear()
+            return False
+        if(choice =='2'):
+            searchByMonth()
+            return False
+        if(choice =='3'):
+            searchByDay()
+            return False
+        if(choice =='4'):
+            return True
+        else:
+            print("Error: Invalid input. Please try again.")
+            return False
+    exit = choice
 
-    def searchAccidentTime():
-        print("search by time")
-
-        def searchAccidentConditions():
-            print("Search by conditions")
+def searchAccidentsCondition():
+    exit = False
+    while(exit == False):
+        print("Please enter the number corresponding to your desired search:") 
+        print("1: Search by temperature range")
+        print("2: Search by range of visibility distance")
+        print("3: Exit this menu") 
+        choice = input()
+        if(choice =='1'):
+            searchByTemp()
+            return False
+        if(choice =='2'):
+            searchByVision()
+            return False
+        if(choice =='3'):
+            return True
+        else:
+            print("Error: Invalid input. Please try again.")
+            return False
+    exit = choice
 
 def menu_selection(action):
-    
-    if(action =='1'):
-        loadData()
-        return False
+
     if(action =='2'):
         processData()
         return False
@@ -339,17 +365,17 @@ def menu_selection(action):
     if(action =='4'):
         searchAccidentsPlace()
         return False
-    # if(action =='5'):
-    #         searchAccidentsTime()
-    #         return False
-    # if(action =='6'):
-    #         searchAccidentsConditions()
-    #         return False
+    if(action =='5'):
+        searchAccidentsTime()
+        return False
+    if(action =='6'):
+        searchAccidentsCondition()
+        return False
     if(action =='7'):
-            return True
+        return True
     else:
-            print("Error: Invalid input. Please try again.")
-            return False
+        print("Error: Invalid input. Please try again.")
+        return False
 
 # definition for main
 
@@ -358,7 +384,6 @@ def main():
 
     exit = False
     while(exit == False):
-        print('\n')
         print("Please enter the number of a prompt from the following menu:")
         print("1: Load  the data")
         print("2: Process the data")
@@ -372,7 +397,3 @@ def main():
 
 # start of main program
 main()
-
-
-
-
