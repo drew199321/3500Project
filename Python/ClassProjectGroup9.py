@@ -12,9 +12,10 @@
 
 # from asyncio.windows_events import NULL
 import csv
-from numpy import average
+from numpy import average, column_stack
 import pandas as pd
 from datetime import datetime
+
 
 
 print("Loading and cleaning input data set:")
@@ -39,6 +40,11 @@ df['Start_Time'] = pd.to_datetime(df['Start_Time'])
 df['End_Time'] = pd.to_datetime(df['End_Time'])
 df = df[df['Start_Time'] != df['End_Time']]
 
+
+
+
+
+
 ## Only consider the first 5 digits of zipcode
 # zipCoder = df['Zipcode'].str[:5]
 # # Tested with index 21 with zipcode: 41033-9698; output: 41033
@@ -47,16 +53,23 @@ print ("CLEANING IS COMPLETE")
 
 # function to reload data if that is what the user requests
 def loadData():
-    print("Loading and cleaning input data set:")
-    print("************************************")
-    # Dataset = pd.read_csv("./Datasets/InputDataSample.csv")
-    print('[', datetime.now(), '] Starting Script')
-    Dataset = pd.read_csv("./Datasets/US_Accidents_data.csv")
-    df = pd.DataFrame(Dataset)
-    return df
+    Dataset = pd.read_csv("./Datasets/US_Accidents_data11.csv")
+    if (Dataset.empty):
+        print("File is Empty. Please make sure US_Accidents_data.csv is in the current directory.")
+    else:
+        print("Loading and cleaning input data set:")
+        print("************************************")
+        # Dataset = pd.read_csv("./Datasets/InputDataSample.csv")
+        print('[', datetime.now(), '] Starting Script')
+        df = pd.DataFrame(Dataset)
+        return df
 
 # CLEAN DATA
 def processData():
+    global Dataset
+    if (Dataset.empty):
+        print("File is Empty. Please make sure US_Accidents_data.csv is in the " +
+            "current directory.")
     # Drop rows with missing data from any of the specified columns
     dropRowsSingle = df.dropna(subset=['ID', 'Severity', 'Zipcode', 'Start_Time',
     'End_Time', 'Visibility(mi)', 'Weather_Condition', 'Country'], inplace=True) 
@@ -195,12 +208,45 @@ def prompt9():
     print("Accidents in Bakersfield with Severity 3: ", bakersfieldSev3)
     print("Accidents in Bakersfield with Severity 4: ", bakersfieldSev4)
 
-# 10 What was the longest accident (in hours) recorded in Florida in the Spring (March, April, and May) of 2022?
-# def prompt10():
-#     print("Prompt 10")
-#     stateFlorida = df['State'] == 'FL'
-#     floridaColumns = df[stateFlorida]
-#     acc2022 = df[years == 2022]
+# 10 What was the longest accident (in hours) recorded in Florida in the Spring (March, April, and May) of 2020?
+def prompt10():
+    print("10. What was the longest accident (in hours) recorded in Florida in"
+        " the Spring (March, April, and May) of 2020?")
+    # gather the start, end, and state from the dataset
+    longest_acc_fl = df.loc[:, ('Start_Time', 'End_Time', 'State')]
+    # get state: Florida
+    longest_acc_fl = longest_acc_fl[longest_acc_fl['State'] == "FL"]
+    # get year: 2020
+    longest_acc_fl = longest_acc_fl[longest_acc_fl['Start_Time'].dt.year == 2020]
+    # print(longest_acc_fl[longest_acc_fl['Start_Time'].dt.year == 2020])
+    # get months greater than February
+    longest_acc_fl = longest_acc_fl[longest_acc_fl['Start_Time'].dt.month >= 3]
+    # get months less than June
+    longest_acc_fl = longest_acc_fl[longest_acc_fl['Start_Time'].dt.month <= 5]
+    # get the data with the most time
+    longest_acc_fl = str((longest_acc_fl['End_Time'] - longest_acc_fl['Start_Time']).max())
+
+    # if the year chosen doesn't have any data, it will print an error message
+    if (longest_acc_fl == "NaT"):
+        time_in_hours = 0
+        print("\nError: No Data Loaded meeting this criteria.")
+    else:
+        # else, we will extrapolate the data from the times
+        # hours from days
+        days_in_hours = int(longest_acc_fl.split()[0]) * 24 
+        # return time of day
+        longest_acc_fl = longest_acc_fl.split()[2] 
+        time_in_hours = int(longest_acc_fl.split(":")[0]) # split by : 
+        # get minutes from the hour
+        time_in_min = int(longest_acc_fl.split(":")[1]) / 60 
+        # get seconds from hour
+        time_in_sec = int(longest_acc_fl.split(":")[2]) / 3600  
+        # Add the days, hours, min, and seconds
+        time_in_hours = days_in_hours + time_in_hours + time_in_min + time_in_sec
+        # round the result for better readability 
+        acc_2020_fl = round(time_in_hours, 2)
+    # print the solution
+    print(acc_2020_fl, "Hours.")
 
 #**************************************
 # end of functions for the promps/questions, 
@@ -244,7 +290,7 @@ def printAnswers():
     prompt7()
     prompt8()
     prompt9()
-    # prompt10()
+    prompt10()
 
 def searchAccidentsPlace():
     exit = False
@@ -280,8 +326,9 @@ def searchAccidentsPlace():
             print("Search by conditions")
 
 def menu_selection(action):
+    
     if(action =='1'):
-        df = loadData()
+        loadData()
         return False
     if(action =='2'):
         processData()
@@ -311,6 +358,7 @@ def main():
 
     exit = False
     while(exit == False):
+        print('\n')
         print("Please enter the number of a prompt from the following menu:")
         print("1: Load  the data")
         print("2: Process the data")
