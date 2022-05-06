@@ -16,6 +16,35 @@ from numpy import average
 import pandas as pd
 from datetime import datetime
 
+print("Loading and cleaning input data set:")
+print("************************************")
+# Dataset = pd.read_csv("./Datasets/InputDataSample.csv")
+print('[', datetime.now(), '] Starting Script')
+Dataset = pd.read_csv("./Datasets/US_Accidents_data.csv")
+df = pd.DataFrame(Dataset)
+
+# Drop rows with missing data from any of the specified columns
+dropRowsSingle = df.dropna(subset=['ID', 'Severity', 'Zipcode', 'Start_Time',
+'End_Time', 'Visibility(mi)', 'Weather_Condition', 'Country'], inplace=True) 
+
+# Drop Rows missing 3 columns
+dropRowsTriple = df.dropna(thresh=len(df.columns)-2, inplace=True)
+
+# Drop Rows where Distance = 0
+df = df.drop(df.loc[df['Distance(mi)'] == 0].index)
+
+# Drop rows where start and endtime are the same(equal zero)
+df['Start_Time'] = pd.to_datetime(df['Start_Time'])
+df['End_Time'] = pd.to_datetime(df['End_Time'])
+df = df[df['Start_Time'] != df['End_Time']]
+
+## Only consider the first 5 digits of zipcode
+# zipCoder = df['Zipcode'].str[:5]
+# # Tested with index 21 with zipcode: 41033-9698; output: 41033
+# print(zipCoder[21])
+print ("CLEANING IS COMPLETE")
+
+# function to reload data if that is what the user requests
 def loadData():
     print("Loading and cleaning input data set:")
     print("************************************")
@@ -23,6 +52,7 @@ def loadData():
     print('[', datetime.now(), '] Starting Script')
     Dataset = pd.read_csv("./Datasets/US_Accidents_data.csv")
     df = pd.DataFrame(Dataset)
+    return df
 
 # CLEAN DATA
 def processData():
@@ -170,7 +200,16 @@ def prompt10():
 
 # end of functions for the promps/questions, resume functions for list 3 to 7 
 def printAnswers():
-    print("these are the answers")
+    prompt1()
+    prompt2()
+    prompt3()
+    prompt4()
+    prompt5()
+    prompt6()
+    prompt7()
+    prompt8()
+    prompt9()
+    prompt10()
 
 def searchAccidentsPlace():
     print("we will prompt user to choose place")
@@ -183,10 +222,10 @@ def searchAccidentsPlace():
 
 def menu_selection(action):
     if(action =='1'):
-            loadData()
+            df = loadData()
             return False
     if(action =='2'):
-            processData()
+            cleanData= processData()
             return False
     if(action =='3'):
             printAnswers()
