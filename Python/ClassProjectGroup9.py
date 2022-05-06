@@ -76,6 +76,7 @@ def processData():
 # # Tested with index 21 with zipcode: 41033-9698; output: 41033
 # print(zipCoder[21])
     print ("CLEANING IS COMPLETE")
+#**************************************
 # starting functions that answer the questions
 # 1. In what month were there more accidents reported?
 def prompt1():
@@ -200,7 +201,38 @@ def prompt10():
     floridaColumns = df[stateFlorida]
     acc2022 = df[years == 2022]
 
-# end of functions for the promps/questions, resume functions for list 3 to 7 
+#**************************************
+# end of functions for the promps/questions, 
+#now definitions for  the searches in options 4, 5, 6
+# first group associated with choice 4
+def searchByCity ():
+    print("searching for city")
+
+    def searchByState():
+    print("Searching by state")
+
+    def searchByZip():
+        print ("searching by zip code")
+
+        # associated with choice 5
+def searchByYear():
+    print ("searching by year")
+    
+def searchByMonth():
+    print("searching by month")
+    
+def searchByDay():
+    print("searching by day")
+
+# definitions for choice 6
+def searchByTemp():
+    print("Searching by temperature range")
+
+def searchByVision():
+    print("searching by visability range")
+
+# end of search definitions 
+#**************************************
 def printAnswers():
     prompt1()
     prompt2()
@@ -214,6 +246,30 @@ def printAnswers():
     prompt10()
 
 def searchAccidentsPlace():
+    exit = False
+    while(exit == False):
+        print("Please enter the number corresponding to your desired search:") 
+        print("1: Search by city")
+        print("2: Search by state")
+        print("3: Search by the zip code")
+        print("4: Exit this menu") 
+        choice = input()
+        if(choice =='1'):
+                searchByCity()
+                return False
+    if(choice =='2'):
+            searchByState()
+            return False
+    if(choice =='3'):
+            searchByZip()
+            return False
+    if(choice =='4'):
+            return True
+    else:
+            print("Error: Invalid input. Please try again.")
+            return False
+exit = choice
+
     print("we will prompt user to choose place")
 
     def searchAccidentTime():
