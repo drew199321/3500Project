@@ -94,6 +94,7 @@ def prompt2():
 # 3. What is the state that had the most accidents of severity 2 in 2021?
 def prompt3():
     print("Prompt 3")
+    years = df['years'] = pd.DatetimeIndex(df['Start_Time']).year
     acc2021 = df[years == 2021]
     severity2 = acc2021['Severity'] == 2
     print(type(severity2))
@@ -120,8 +121,9 @@ def prompt4():
 # 5. What are the 5 cities that had the most accidents in 2019 in California?
 def prompt5():
     print("Prompt 5")
+    years = df['years'] = pd.DatetimeIndex(df['Start_Time']).year
     stateCalifornia = df['State'] == "CA"
-    acc2019 = df[ears == 2019]
+    acc2019 = df[years == 2019]
     # print(acc2019)
     caliAccidents2019 = acc2019[stateCalifornia]
     topCaliforniaCities = caliAccidents2019['City'].value_counts().head() 
@@ -244,19 +246,27 @@ def menu_selection(action):
     else:
             print("Error: Invalid input. Please try again.")
             return False
-exit = False
-while(exit == False):
-    print("Please enter the number of a prompt from the following menu:")
-    print("1: Load  the data")
-    print("2: Process the data")
-    print("3: Print the answers to the questions")
-    print("4: Search accidents by place (city, state, zip)") 
-    print("5: Search accidents by time(year, month, day)")
-    print("6: Search accidents by conditions (temperature range and visibility range)")
-    print("7: Quit")
-    action = input()
-    exit = menu_selection(action)
 
+# definition for main
+
+def main(): 
+    years = df['years'] = pd.DatetimeIndex(df['Start_Time']).year
+
+    exit = False
+    while(exit == False):
+        print("Please enter the number of a prompt from the following menu:")
+        print("1: Load  the data")
+        print("2: Process the data")
+        print("3: Print the answers to the questions")
+        print("4: Search accidents by place (city, state, zip)") 
+        print("5: Search accidents by time(year, month, day)")
+        print("6: Search accidents by conditions (temperature range and visibility range)")
+        print("7: Quit")
+        action = input()
+        exit = menu_selection(action)
+
+# start of main program
+main()
 
 
 
