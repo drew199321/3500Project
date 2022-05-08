@@ -246,7 +246,7 @@ def printAnswers():
 
 #**************************************
 # associated with choice 4 on menu
-def searchAccidentsPlace():
+def searchByCity():
     cityChoice = input("Please type the name of the city you would like to search")
     cityChoiceAccidents  = df['City'] == cityChoice
     tmpDF = df[cityChoiceAccidents]
@@ -256,17 +256,66 @@ def searchAccidentsPlace():
             print("Your selection has no entries. Either your city ")
             print("choice has very safe drivers or there is a spelling mismatch.")  
             print("\nPlease try again, make sure to capitalize the ")
-            print("first letter. If you want to use only the state or ")
-            cityChoice = input("zip code, type NA to move on.") 
-            if(cityChoice == 'NA'):
-                totalAccidents = len(df)
+            print("first letter. If you want to go back to the main menu ")
+            cityChoice = input("type oops")
+            if(cityChoice == 'oops'):
+                totalAccidents = 0
                 break
             cityChoiceAccidents  = df['City'] == cityChoice
             tmpDF = df[cityChoiceAccidents]
             totalAccidents = len(tmpDF)
-#*************
 
-    print("total accidents = ",totalAccidents) 
+    if (cityChoice != 'oops'):
+        print("Total accidents in " + cityChoice + "was: \n")
+        print(totalAccidents)
+def searchByState():
+    stateChoice = input("Please type the name of the state you would like to search")
+    stateChoiceAccidents  = df['State'] == stateChoice
+    stateTmpDF = df[stateChoiceAccidents]
+    totalAccidents = len(stateTmpDF)
+    if (totalAccidents == 0):
+        while totalAccidents  == 0:
+            print("Your selection has no entries. Either your state ")
+            print("choice has very safe drivers or there is a spelling mismatch.")  
+            print("\nPlease try again. Make sure to use USPS state abbreviations")
+            print("If you want to go back to the main menu type: oops")
+            stateChoice = input()
+            if(stateChoice == 'oops'):
+                totalAccidents = 0
+                break
+            stateChoiceAccidents  = df['State'] == stateChoice
+            stateTmpDF = df[stateChoiceAccidents]
+            totalAccidents = len(stateTmpDF)
+
+    if (stateChoice != 'oops'):
+        print("Total accidents in " + stateChoice + "was: \n")
+        print(totalAccidents)
+
+def searchByZip():
+    print("search by zip")
+
+
+def  searchAccidentsPlace():
+    exit = False
+    while(exit == False):
+        print("Please enter the number of a prompt from the following menu:")
+        print("1: Search by city")
+        print("2:Search by state")
+        print("3: Search by zip code")
+        print("4: Exit this menu")
+        action = input()
+        if(action =='1'):
+            searchByCity()
+            return False
+        if(action =='2'):
+            searchByState()
+            return False
+        if(action =='3'):
+            searchByZip()
+            return True
+        else:
+            print("Error: Invalid input. Please try again.")
+            return False
 
 def searchAccidentsTime():
         month = input("Type the month")
