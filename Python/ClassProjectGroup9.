@@ -247,17 +247,26 @@ def printAnswers():
 #**************************************
 # associated with choice 4 on menu
 def searchAccidentsPlace():
-        cityChoice = input("Please type the name of the city you would like to search")
-        cityChoiceAccidents  = df['City'] == cityChoice
-#        stateChoice = input("Please type the name of the state you would like to search")
-#        stateChoiceAccidents  = df['State'] == stateChoice 
-        print(cityChoiceAccidents)
-#        print("State accidents = " + stateChoiceAccidents + "\n")
+    cityChoice = input("Please type the name of the city you would like to search")
+    cityChoiceAccidents  = df['City'] == cityChoice
+    tmpDF = df[cityChoiceAccidents]
+    totalAccidents = len(tmpDF)
+    if (totalAccidents == 0):
+        while totalAccidents  == 0:
+            print("Your selection has no entries. Either your city ")
+            print("choice has very safe drivers or there is a spelling mismatch.")  
+            print("\nPlease try again, make sure to capitalize the ")
+            print("first letter. If you want to use only the state or ")
+            cityChoice = input("zip code, type NA to move on.") 
+            if(cityChoice == 'NA'):
+                totalAccidents = len(df)
+                break
+            cityChoiceAccidents  = df['City'] == cityChoice
+            tmpDF = df[cityChoiceAccidents]
+            totalAccidents = len(tmpDF)
+#*************
 
-
-#        zip = input("Please type the zip code you would like to search")
-
-
+    print("total accidents = ",totalAccidents) 
 
 def searchAccidentsTime():
         month = input("Type the month")
