@@ -16,7 +16,6 @@ from numpy import average
 import pandas as pd
 from datetime import datetime
 
-
 print("Loading and cleaning input data set:")
 print("************************************")
 # Dataset = pd.read_csv("./Datasets/InputDataSample.csv")
@@ -39,13 +38,10 @@ df['Start_Time'] = pd.to_datetime(df['Start_Time'])
 df['End_Time'] = pd.to_datetime(df['End_Time'])
 df = df[df['Start_Time'] != df['End_Time']]
 
-## Only consider the first 5 digits of zipcode
+# Only consider the first 5 digits of zipcode
 # zipCoder = df['Zipcode'].str[:5]
-# # Tested with index 21 with zipcode: 41033-9698; output: 41033
+# Tested with index 21 with zipcode: 41033-9698; output: 41033
 # print(zipCoder[21])
-print ("CLEANING IS COMPLETE")
-
-# function to reload data if that is what the user requests
 def loadData():
     print("Loading and cleaning input data set:")
     print("************************************")
@@ -236,37 +232,6 @@ def prompt10():
     print(acc_2020_fl, "Hours.")
 
 #**************************************
-# end of functions for the promps/questions, 
-#now definitions for  the searches in options 4, 5, 6
-# first group associated with choice 4
-def searchByCity ():
-    print("searching for city")
-
-def searchByState():
-    print("Searching by state")
-
-def searchByZip():
-    print ("searching by zip code")
-
-        # associated with choice 5
-def searchByYear():
-    print ("searching by year")
-    
-def searchByMonth():
-    print("searching by month")
-    
-def searchByDay():
-    print("searching by day")
-
-# definitions for choice 6
-def searchByTemp():
-    print("Searching by temperature range")
-
-def searchByVision():
-    print("searching by visibility range")
-
-# end of search definitions 
-#**************************************
 def printAnswers():
     prompt1()
     prompt2()
@@ -279,82 +244,117 @@ def printAnswers():
     prompt9()
     prompt10()
 
-
-
-
 #**************************************
-def searchAccidentsPlace():
+# associated with choice 4 on menu
+def searchByCity():
+    print("Please type the name of the city you would like to search.\n") 
+    cityChoice = input()
+    cityChoiceAccidents  = df['City'] == cityChoice
+    cityTmpDF = df[cityChoiceAccidents]
+    cityTotalAccidents = len(cityTmpDF)
+    if (cityTotalAccidents == 0):
+        while cityTotalAccidents  == 0:
+            print("Your selection has no entries. Either your city ")
+            print("choice has very safe drivers or there is a spelling mismatch.")  
+            print("\nPlease try again, make sure to capitalize the ")
+            print("first letter. If you meant to search by state or zip type NA") 
+            cityChoice = input()
+            if(cityChoice == 'NA'):
+                break
+            cityChoiceAccidents  = df['City'] == cityChoice
+            cityTmpDF = df[cityChoiceAccidents]
+            cityTotalAccidents = len(cityTmpDF)
+
+    if (cityChoice != 0):
+        print("The number of accidents in " + cityChoice + " was: ")
+        print(cityTotalAccidents)
+
+def searchByState():
+    print("Please type the name of the state you would like to search.\n") 
+    stateChoice = input("Use USPS abbreviations i.e. CA")
+    stateChoiceAccidents  = df['State'] == stateChoice
+    stateTmpDF = df[stateChoiceAccidents]
+    stateTotalAccidents = len(stateTmpDF)
+    if (stateTotalAccidents == 0):
+        while stateTotalAccidents  == 0:
+            print("Your selection has no entries. Either your state ")
+            print("choice has very safe drivers or there is a spelling mismatch.")  
+            print("\nPlease try again, use USPS state abbreviations i.e. CA.")
+            print("Type: NA, if you want to go back.")
+            stateChoice = input()
+            if(stateChoice == 'NA'):
+                break
+            stateChoiceAccidents  = df['State'] == stateChoice
+            stateTmpDF = df[stateChoiceAccidents]
+            stateTotalAccidents = len(stateTmpDF)
+    
+    if(stateChoice != 'NA'):
+        print("The total number of accidents in " + stateChoice + " is: ",stateTotalAccidents)
+
+def searchByZip():
+    print("search by zip")
+
+
+def  searchAccidentsPlace():
     exit = False
     while(exit == False):
-        print("Please enter the number corresponding to your desired search:") 
+        print("Please enter the number of a prompt from the following menu:")
         print("1: Search by city")
-        print("2: Search by state")
-        print("3: Search by the zip code")
-        print("4: Exit this menu") 
-        choice = input()
-        if(choice =='1'):
+        print("2:Search by state")
+        print("3: Search by zip code")
+        print("4: Exit this menu")
+        action = input()
+        if(action =='1'):
             searchByCity()
             return False
-        if(choice =='2'):
+        if(action =='2'):
             searchByState()
             return False
-        if(choice =='3'):
+        if(action =='3'):
             searchByZip()
-            return False
-        if(choice =='4'):
+            return false
+        if(action =='4'):
             return True
         else:
             print("Error: Invalid input. Please try again.")
             return False
-    exit = choice
+
+#def searchByMonth():
 
 def searchAccidentsTime():
-    exit = False
     while(exit == False):
-        print("Please enter the number corresponding to your desired search:") 
-        print("1: Search by year")
-        print("2: Search by month")
-        print("3: Search by the day")
-        print("4: Exit this menu") 
-        choice = input()
-        if(choice =='1'):
-            searchByYear()
-            return False
-        if(choice =='2'):
+        print("Please enter the number of a prompt from the following menu:")
+        print("1: Search by month")
+        print("2:Search by day")
+        print("3: Search by year")
+        print("4: Exit this menu")
+        action = input()
+        if(action =='1'):
             searchByMonth()
             return False
-        if(choice =='3'):
+        if(action =='2'):
             searchByDay()
             return False
-        if(choice =='4'):
+        if(action =='3'):
+            searchByYear()
+            return false
+        if(action =='4'):
             return True
         else:
             print("Error: Invalid input. Please try again.")
             return False
-    exit = choice
 
 def searchAccidentsCondition():
-    exit = False
-    while(exit == False):
-        print("Please enter the number corresponding to your desired search:") 
-        print("1: Search by temperature range")
-        print("2: Search by range of visibility distance")
-        print("3: Exit this menu") 
-        choice = input()
-        if(choice =='1'):
-            searchByTemp()
-            return False
-        if(choice =='2'):
-            searchByVision()
-            return False
-        if(choice =='3'):
-            return True
-        else:
-            print("Error: Invalid input. Please try again.")
-            return False
-    exit = choice
-
+        minTemp = input("input the lowest temperture of the range")
+        maxTemp = input("input the highest temperture of the range")
+        minVisibility = input("input the lowest visibility of the range")
+        maxVisibility = input("input the  farthest visibility of the range")
 def menu_selection(action):
+
+    if(action =='1'):
+        loadData()
+        return False
+
 
     if(action =='2'):
         processData()
