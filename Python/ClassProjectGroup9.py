@@ -337,30 +337,80 @@ def  searchAccidentsPlace():
             print("Error: Invalid input. Please try again.")
             return False
 
-#def searchByMonth():
+def searchByMonth(monthChoice):
+    if(monthChoice == 'NA'):
+        return df
+    monthChoiceAccidents = df['month'] = pd.DatetimeIndex(df['Start_Time']).month == monthChoice
+#    monthChoiceAccidents  = df['Month'] == monthChoice
+    monthTmpDF = df[monthChoiceAccidents]
+    monthTotalAccidents = len(monthTmpDF)
+    if (monthTotalAccidents == 0):
+        while monthTotalAccidents  == 0:
+            print("Your selection has no entries. Please type a number 1-12\n")
+            print("or type: NA, to avoid limiting your selection by a month")
+            monthChoice = input()
+            if(monthChoice == 'NA'):
+                monthTmpDF = df
+                break
+            monthTmpDF = df[monthChoiceAccidents]
+            monthTotalAccidents = len(monthTmpDF)
+    return monthTmpDF
+
+############################################################################
+def searchByDay(currentDF,dayChoice):
+    if(dayChoice == 'NA'):
+        return currentDF
+    dayChoiceAccidents = df['day'] = pd.DatetimeIndex(df['Start_Time']).day == dayChoice
+    dayTmpDF = currentDF[dayChoiceAccidents]
+    dayTotalAccidents = len(dayTmpDF)
+    if (dayTotalAccidents == 0):
+        while dayTotalAccidents  == 0:
+            print("Your selection has no entries. Please type a number 1-31\n")
+            print("or type: NA, to avoid limiting your selection by a day")
+            dayChoice = input()
+            if(dayChoice == 'NA'):
+                dayTmpDF = df
+                break
+            dayTmpDF = df[dayChoiceAccidents]
+            dayTotalAccidents = len(dayTmpDF)
+    return dayTmpDF
+
+############################################################################
+def searchByYear(currentDF, yearChoice):
+    if(yearChoice == 'NA'):
+        return currentDF
+    yearChoiceAccidents = df['year'] = pd.DatetimeIndex(df['Start_Time']).year == yearChoice
+    yearTmpDF = df[yearChoiceAccidents]
+    yearTotalAccidents = len(yearTmpDF)
+    if (yearTotalAccidents == 0):
+        while yearTotalAccidents  == 0:
+            print("Please type a number 2016 to 2021\n")
+            print("or type: NA, to avoid limiting your selection by a year")
+            yearChoice = input()
+            if(yearChoice == 'NA'):
+                yearTmpDF = df
+                break
+            yearTmpDF = df[yearChoiceAccidents]
+            yearTotalAccidents = len(yearTmpDF)
+    return yearTmpDF
 
 def searchAccidentsTime():
-    while(exit == False):
-        print("Please enter the number of a prompt from the following menu:")
-        print("1: Search by month")
-        print("2:Search by day")
-        print("3: Search by year")
-        print("4: Exit this menu")
-        action = input()
-        if(action =='1'):
-            searchByMonth()
-            return False
-        if(action =='2'):
-            searchByDay()
-            return False
-        if(action =='3'):
-            searchByYear()
-            return false
-        if(action =='4'):
-            return True
-        else:
-            print("Error: Invalid input. Please try again.")
-            return False
+    print("You will be given the opportunity to search by month, day, and year.\n")
+    print("If you only want to limit your search by one or two factors,  \n")  
+    print("type: NA, when given those options.")
+    month = input("Please type the month: ")
+    monthDF = searchByMonth(month)
+    answer = len(monthDF)
+    print("the answer is: ",answer) 
+
+    day = input("Please type the day: ")
+    dayDF = searchByDay(monthDF, day)
+    answer = len(dayDF)
+    print("the answer is: ",answer) 
+    year = input("Please type the year you would like to search") 
+    yearDF = searchByYear(dayDF, year)
+    answer = len(yearDF)
+    print("the answer is: ",answer) 
 
 def searchAccidentsCondition():
         minTemp = input("input the lowest temperture of the range")
@@ -372,8 +422,6 @@ def menu_selection(action):
     if(action =='1'):
         loadData()
         return False
-
-
     if(action =='2'):
         processData()
         return False
@@ -415,3 +463,43 @@ def main():
 
 # start of main program
 main()
+############################################################################
+def searchByDay(dayChoice):
+    if(dayChoice == 'NA'):
+        return df
+    dayChoiceAccidents = df['day'] = pd.DatetimeIndex(df['Start_Time']).day == dayChoice
+#    dayChoiceAccidents  = df['Daydd'] == dayChoice
+    dayTmpDF = df[dayChoiceAccidents]
+    dayTotalAccidents = len(dayTmpDF)
+    if (dayTotalAccidents == 0):
+        while dayTotalAccidents  == 0:
+            print("Your selection has no entries. Please type a number 1-12\n")
+            print("or type: NA, to avoid limiting your selection by a day")
+            dayChoice = input()
+            if(dayChoice == 'NA'):
+                dayTmpDF = df
+                break
+            dayTmpDF = df[dayChoiceAccidents]
+            dayTotalAccidents = len(dayTmpDF)
+    return dayTmpDF
+
+############################################################################
+def searchByYear(yearChoice):
+    if(yearChoice == 'NA'):
+        return df
+    yearChoiceAccidents = df['year'] = pd.DatetimeIndex(df['Start_Time']).year == yearChoice
+#    yearChoiceAccidents  = df['Daydd'] == yearChoice
+    yearTmpDF = df[yearChoiceAccidents]
+    yearTotalAccidents = len(yearTmpDF)
+    if (yearTotalAccidents == 0):
+        while yearTotalAccidents  == 0:
+            print("Your selection has no entries. Please type a number 1-12\n")
+            print("or type: NA, to avoid limiting your selection by a year")
+            yearChoice = input()
+            if(yearChoice == 'NA'):
+                yearTmpDF = df
+                break
+            yearTmpDF = df[yearChoiceAccidents]
+            yearTotalAccidents = len(yearTmpDF)
+    return yearTmpDF
+
