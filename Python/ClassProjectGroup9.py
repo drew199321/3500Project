@@ -265,7 +265,7 @@ def searchByCity():
             cityTmpDF = df[cityChoiceAccidents]
             cityTotalAccidents = len(cityTmpDF)
 
-    if (cityChoice != 0):
+    if (cityChoice != 'NA'):
         print("The number of accidents in " + cityChoice + " was: ")
         print(cityTotalAccidents)
 
@@ -292,8 +292,26 @@ def searchByState():
         print("The total number of accidents in " + stateChoice + " is: ",stateTotalAccidents)
 
 def searchByZip():
-    print("search by zip")
+    print("Please type the 5 digit zip code you want to search.")
+    zipChoice = input()
+    zipChoiceAccidents  = df['Zipcode'] == zipChoice
+    zipTmpDF = df[zipChoiceAccidents]
+    zipTotalAccidents = len(zipTmpDF)
+    if (zipTotalAccidents == 0):
+        while zipTotalAccidents  == 0:
+            print("Your selection has no entries. Either your zip code")
+            print("choice has very safe drivers or the zip code you entered does not ")
+            print("\n exist. Please try again, or type: NA, to go back.")
+            zipChoice = input()
+            if(zipChoice == 'NA'):
+                break
+            zipChoiceAccidents  = df['Zipcode'] == zipChoice
+            zipTmpDF = df[zipChoiceAccidents]
+            zipTotalAccidents = len(zipTmpDF)
 
+    if (zipChoice != 'NA'):
+        print("The number of accidents in " + zipChoice + " was: ")
+        print(zipTotalAccidents)
 
 def  searchAccidentsPlace():
     exit = False
@@ -312,7 +330,7 @@ def  searchAccidentsPlace():
             return False
         if(action =='3'):
             searchByZip()
-            return false
+            return False
         if(action =='4'):
             return True
         else:
