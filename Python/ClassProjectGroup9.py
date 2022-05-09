@@ -340,8 +340,8 @@ def  searchAccidentsPlace():
 def searchByMonth(monthChoice):
     if(monthChoice == 'NA'):
         return df
-    monthChoiceAccidents = df['month'] = pd.DatetimeIndex(df['Start_Time']).month == monthChoice
-#    monthChoiceAccidents  = df['Month'] == monthChoice
+##**** need help with te following search
+    monthChoiceAccidents = df['Month'] = pd.DatetimeIndex(df['Start_Time']).month == monthChoice
     monthTmpDF = df[monthChoiceAccidents]
     monthTotalAccidents = len(monthTmpDF)
     if (monthTotalAccidents == 0):
@@ -360,6 +360,7 @@ def searchByMonth(monthChoice):
 def searchByDay(currentDF,dayChoice):
     if(dayChoice == 'NA'):
         return currentDF
+### need help with following line
     dayChoiceAccidents = df['day'] = pd.DatetimeIndex(df['Start_Time']).day == dayChoice
     dayTmpDF = currentDF[dayChoiceAccidents]
     dayTotalAccidents = len(dayTmpDF)
@@ -379,6 +380,7 @@ def searchByDay(currentDF,dayChoice):
 def searchByYear(currentDF, yearChoice):
     if(yearChoice == 'NA'):
         return currentDF
+### need help with following line
     yearChoiceAccidents = df['year'] = pd.DatetimeIndex(df['Start_Time']).year == yearChoice
     yearTmpDF = df[yearChoiceAccidents]
     yearTotalAccidents = len(yearTmpDF)
