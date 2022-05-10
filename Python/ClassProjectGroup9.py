@@ -414,8 +414,8 @@ def searchAccidentsCondition():
     maxVisibility = input("input the  farthest visibility of the range")
     tempAndVis = df['Temperature(F)'] > minTemp
     tempAndVis = tempAndVis['Temperature(F)'] < maxTemp
-    tempAndVis = tempAndVis['Visibility'] < maxVisibility
-    tempAndVis = tempAndVis['Visibility'] > minVisibility
+    tempAndVis = tempAndVis['Visibility(mi)'] < maxVisibility
+    tempAndVis = tempAndVis['Visibility(mi)'] > minVisibility
     totalInRange = len(tempAndVis)
     print("The number of accidents in specified tempature and visibility range is: ")
     print(totalInRange)
