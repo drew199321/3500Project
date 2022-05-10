@@ -239,123 +239,74 @@ def printAnswers():
 
 #**************************************
 # associated with choice 4 on menu
-def searchByCity():
+def searchAccidentsPlace():
+
     print("Please type the name of the city you would like to search.\n") 
     cityChoice = input()
-    cityChoiceAccidents  = df['City'] == cityChoice
+    if(cityChoice != 'NA'):
+        cityChoiceAccidents  = df['City'] == cityChoice
+    else: 
+        cityChoiceAccidents = df
     cityTmpDF = df[cityChoiceAccidents]
     cityTotalAccidents = len(cityTmpDF)
-    if (cityTotalAccidents == 0):
-        while cityTotalAccidents  == 0:
-            print("Your selection has no entries. Either your city ")
-            print("choice has very safe drivers or there is a spelling mismatch.")  
-            print("\nPlease try again, make sure to capitalize the ")
-            print("first letter. If you meant to search by state or zip type NA") 
-            cityChoice = input()
-            if(cityChoice == 'NA'):
-                break
-            cityChoiceAccidents  = df['City'] == cityChoice
-            cityTmpDF = df[cityChoiceAccidents]
-            cityTotalAccidents = len(cityTmpDF)
+    print("The number of accidents in " + cityChoice + " was: ")
+    print(cityTotalAccidents)
 
-    if (cityChoice != 'NA'):
-        print("The number of accidents in " + cityChoice + " was: ")
-        print(cityTotalAccidents)
-
-def searchByState():
     print("Please type the name of the state you would like to search.\n") 
-    stateChoice = input("Use USPS abbreviations i.e. CA")
-    stateChoiceAccidents  = df['State'] == stateChoice
+    stateChoice = input()
+    if(stateChoice != 'NA'):
+        stateChoiceAccidents  = df['State'] == stateChoice
+    else:
+        stateChoiceAccidents = df 
     stateTmpDF = df[stateChoiceAccidents]
     stateTotalAccidents = len(stateTmpDF)
-    if (stateTotalAccidents == 0):
-        while stateTotalAccidents  == 0:
-            print("Your selection has no entries. Either your state ")
-            print("choice has very safe drivers or there is a spelling mismatch.")  
-            print("\nPlease try again, use USPS state abbreviations i.e. CA.")
-            print("Type: NA, if you want to go back.")
-            stateChoice = input()
-            if(stateChoice == 'NA'):
-                break
-            stateChoiceAccidents  = df['State'] == stateChoice
-            stateTmpDF = df[stateChoiceAccidents]
-            stateTotalAccidents = len(stateTmpDF)
-    
-    if(stateChoice != 'NA'):
-        print("The total number of accidents in " + stateChoice + " is: ",stateTotalAccidents)
+    print("The number of accidents in " + stateChoice + " was: ")
+    print(stateTotalAccidents)
 
-def searchByZip():
-    print("Please type the 5 digit zip code you want to search.")
+    print("Please type the zip code you would like to search.\n") 
     zipChoice = input()
-    zipChoiceAccidents  = df['Zipcode'] == zipChoice
-    zipTmpDF = df[zipChoiceAccidents]
-    zipTotalAccidents = len(zipTmpDF)
-    if (zipTotalAccidents == 0):
-        while zipTotalAccidents  == 0:
-            print("Your selection has no entries. Either your zip code")
-            print("choice has very safe drivers or the zip code you entered does not ")
-            print("\n exist. Please try again, or type: NA, to go back.")
-            zipChoice = input()
-            if(zipChoice == 'NA'):
-                break
-            zipChoiceAccidents  = df['Zipcode'] == zipChoice
-            zipTmpDF = df[zipChoiceAccidents]
-            zipTotalAccidents = len(zipTmpDF)
+    if(zipChoice != 'NA'):
+        zipChoiceAccidents  = df['Zipcode'] == zipChoice
+    else:        
+        zipChoiceAccidents = df
+    zipTmpDF = df[stateChoiceAccidents]
+    zipTotalAccidents = len(zipTmpDF) 
+    print("The number of accidents in " + zipChoice + " was: ")
+    print(zipTotalAccidents)
 
-    if (zipChoice != 'NA'):
-        print("The number of accidents in " + zipChoice + " was: ")
-        print(zipTotalAccidents)
 
-def  searchAccidentsPlace():
-    exit = False
-    while(exit == False):
-        print("Please enter the number of a prompt from the following menu:")
-        print("1: Search by city")
-        print("2:Search by state")
-        print("3: Search by zip code")
-        print("4: Exit this menu")
-        action = input()
-        if(action =='1'):
-            searchByCity()
-            return False
-        if(action =='2'):
-            searchByState()
-            return False
-        if(action =='3'):
-            searchByZip()
-            return False
-        if(action =='4'):
-            return True
-        else:
-            print("Error: Invalid input. Please try again.")
-            return False
-
-def searchByMonth(monthChoice):
-    if(monthChoice == 'NA'):
-        return df
-##**** need help with te following search
-    monthChoiceAccidents = df['Month'] = pd.DatetimeIndex(df['Start_Time']).month == monthChoice
-    monthTmpDF = df[monthChoiceAccidents]
-    monthTotalAccidents = len(monthTmpDF)
-    if (monthTotalAccidents == 0):
-        while monthTotalAccidents  == 0:
-            print("Your selection has no entries. Please type a number 1-12\n")
-            print("or type: NA, to avoid limiting your selection by a month")
-            monthChoice = input()
-            if(monthChoice == 'NA'):
-                monthTmpDF = df
-                break
-            monthTmpDF = df[monthChoiceAccidents]
-            monthTotalAccidents = len(monthTmpDF)
-    return monthTmpDF
 
 ############################################################################
-def searchByDay(currentDF,dayChoice):
-    if(dayChoice == 'NA'):
-        return currentDF
+def searchAccidentsTime():
+    print("You will be given the opportunity to search by month, day, and year.\n")
+    print("If you only want to limit your search by one or two factors,  \n")  
+    print("type: NA, when given those options.")
+    monthChoice = input("Please type the month: ")
+    if(monthChoice == 'NA'):
+        monthChoiceAccidents = df
+##**** need help with te following search
+    else:
+        monthChoiceAccidents = df['Month'] = pd.DatetimeIndex(df['Start_Time']).month == monthChoice
+        monthTmpDF = df[monthChoiceAccidents]
+        monthTotalAccidents = len(monthTmpDF)
+        if (monthTotalAccidents == 0):
+            while monthTotalAccidents  == 0:
+                print("Your selection has no entries. Please type a number 1-12\n")
+                print("or type: NA, to avoid limiting your selection by a month")
+                monthChoice = input()
+                if(monthChoice == 'NA'):
+                    monthChoiceAccidents  = df
+                break
+            monthChoiceAccidents = df[monthChoice]
+            monthTotalAccidents = len(monthChoiceAccidents)
+# monthChoiceaccidents is varible used for complete search at end of searchAccidentsTime function
+############################################################################
+    if( dayChoice == 'NA'):
+        dayChoiceAccidents = DF
 ### need help with following line
-    dayChoiceAccidents = df['day'] = pd.DatetimeIndex(df['Start_Time']).day == dayChoice
-    dayTmpDF = currentDF[dayChoiceAccidents]
+    else:
+        dayChoiceAccidents = df['day'] = pd.DatetimeIndex(df['Start_Time']).day == dayChoice
+        dayTmpDF = currentDF[dayChoiceAccidents]
     dayTotalAccidents = len(dayTmpDF)
     if (dayTotalAccidents == 0):
         while dayTotalAccidents  == 0:
@@ -369,8 +320,17 @@ def searchByDay(currentDF,dayChoice):
             dayTotalAccidents = len(dayTmpDF)
     return dayTmpDF
 
-############################################################################
-def searchByYear(currentDF, yearChoice):
+    answer = len(monthDF)
+    print("the answer is: ",answer) 
+
+    day = input("Please type the day: ")
+    dayDF = searchByDay(monthDF, day)
+    answer = len(dayDF)
+    print("the answer is: ",answer) 
+
+
+    year = input("Please type the year you would like to search") 
+    yearDF = searchByYear(dayDF, year)
     if(yearChoice == 'NA'):
         return currentDF
 ### need help with following line
@@ -389,21 +349,6 @@ def searchByYear(currentDF, yearChoice):
             yearTotalAccidents = len(yearTmpDF)
     return yearTmpDF
 
-def searchAccidentsTime():
-    print("You will be given the opportunity to search by month, day, and year.\n")
-    print("If you only want to limit your search by one or two factors,  \n")  
-    print("type: NA, when given those options.")
-    month = input("Please type the month: ")
-    monthDF = searchByMonth(month)
-    answer = len(monthDF)
-    print("the answer is: ",answer) 
-
-    day = input("Please type the day: ")
-    dayDF = searchByDay(monthDF, day)
-    answer = len(dayDF)
-    print("the answer is: ",answer) 
-    year = input("Please type the year you would like to search") 
-    yearDF = searchByYear(dayDF, year)
     answer = len(yearDF)
     print("the answer is: ",answer) 
 
