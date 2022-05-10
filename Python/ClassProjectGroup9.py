@@ -11,49 +11,37 @@
 ############################################################################
 
 # from asyncio.windows_events import NULL
+import warnings
 import csv
 from numpy import average
 import pandas as pd
 from datetime import datetime
 
+with warnings.catch_warnings():
+    warnings.simplefilter(action = "ignore", category = FutureWarning)
+
+
 print("Loading and cleaning input data set:")
 print("************************************")
-# Dataset = pd.read_csv("./Datasets/InputDataSample.csv")
+
 print('[', datetime.now(), '] Starting Script')
-Dataset = pd.read_csv("./Datasets/US_Accidents_data.csv")
-df = pd.DataFrame(Dataset)
 
-# Drop rows with missing data from any of the specified columns
-dropRowsSingle = df.dropna(subset=['ID', 'Severity', 'Zipcode', 'Start_Time',
-'End_Time', 'Visibility(mi)', 'Weather_Condition', 'Country'], inplace=True) 
+# Define global set here
+df = 0
 
-# Drop Rows missing 3 columns
-dropRowsTriple = df.dropna(thresh=len(df.columns)-2, inplace=True)
-
-# Drop Rows where Distance = 0
-df = df.drop(df.loc[df['Distance(mi)'] == 0].index)
-
-# Drop rows where start and endtime are the same(equal zero)
-df['Start_Time'] = pd.to_datetime(df['Start_Time'])
-df['End_Time'] = pd.to_datetime(df['End_Time'])
-df = df[df['Start_Time'] != df['End_Time']]
-
-# Only consider the first 5 digits of zipcode
-# zipCoder = df['Zipcode'].str[:5]
-# Tested with index 21 with zipcode: 41033-9698; output: 41033
-# print(zipCoder[21])
 def loadData():
     print("Loading and cleaning input data set:")
     print("************************************")
     # Dataset = pd.read_csv("./Datasets/InputDataSample.csv")
     print('[', datetime.now(), '] Starting Script')
-    Dataset = pd.read_csv("./Datasets/US_Accidents_data.csv")
+    Dataset = pd.read_csv("US_Accidents_data.csv")
+    global df
     df = pd.DataFrame(Dataset)
-    return df
 
 # CLEAN DATA
 def processData():
     # Drop rows with missing data from any of the specified columns
+    global df
     dropRowsSingle = df.dropna(subset=['ID', 'Severity', 'Zipcode', 'Start_Time',
     'End_Time', 'Visibility(mi)', 'Weather_Condition', 'Country'], inplace=True) 
 
@@ -73,6 +61,9 @@ def processData():
     # # Tested with index 21 with zipcode: 41033-9698; output: 41033
     # print(zipCoder[21])
     print ("CLEANING IS COMPLETE")
+    return df
+
+
     #**************************************
     # starting functions that answer the questions
     # 1. In what month were there more accidents reported?
@@ -421,35 +412,37 @@ def searchAccidentsCondition():
         maxVisibility = input("input the  farthest visibility of the range")
 def menu_selection(action):
 
-    if(action =='1'):
-        loadData()
-        return False
-    if(action =='2'):
-        processData()
-        return False
-    if(action =='3'):
-        printAnswers()
-        return False
-    if(action =='4'):
-        searchAccidentsPlace()
-        return False
-    if(action =='5'):
-        searchAccidentsTime()
-        return False
-    if(action =='6'):
-        searchAccidentsCondition()
-        return False
-    if(action =='7'):
-        return True
-    else:
+    try:
+        if(action =='1'):
+            loadData()
+            return False
+        if(action =='2'):
+            processData()
+            return False
+        if(action =='3'):
+            printAnswers()
+            return False
+        if(action =='4'):
+            searchAccidentsPlace()
+            return False
+        if(action =='5'):
+            searchAccidentsTime()
+            return False
+        if(action =='6'):
+            searchAccidentsCondition()
+            return False
+        if(action =='7'):
+            return True
+    except:
         print("Error: Invalid input. Please try again.")
         return False
 
 # definition for main
+loaded = False
 
 def main(): 
-    years = df['years'] = pd.DatetimeIndex(df['Start_Time']).year
-
+    # years = df['years'] = pd.DatetimeIndex(df['Start_Time']).year
+    global loaded
     exit = False
     while(exit == False):
         print("Please enter the number of a prompt from the following menu:")
@@ -460,8 +453,14 @@ def main():
         print("5: Search accidents by time(year, month, day)")
         print("6: Search accidents by conditions (temperature range and visibility range)")
         print("7: Quit")
-        action = input()
-        exit = menu_selection(action)
+
+        try:
+            action = input()
+            exit = menu_selection(action)
+        except:
+            print("An error has occurred. Please check that data is loaded and try again")
+
+
 
 # start of main program
 main()
