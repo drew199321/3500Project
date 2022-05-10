@@ -20,12 +20,12 @@ from datetime import datetime
 with warnings.catch_warnings():
     warnings.simplefilter(action = "ignore", category = FutureWarning)
 
+print("Welcome to a data processing application to find records of accidents\n")
+print("that occurred in the U.S. from 2016 to 2021.\n")
+print("You will need to load (1) the information first and then (2) Process\n")
+print("it before you can perform any searches on the data.")
 
-print("Loading and cleaning input data set:")
 print("************************************")
-
-print('[', datetime.now(), '] Starting Script')
-
 # Define global set here
 df = 0
 
@@ -37,6 +37,8 @@ def loadData():
     Dataset = pd.read_csv("US_Accidents_data.csv")
     global df
     df = pd.DataFrame(Dataset)
+    totalData = len(df)
+    print(totalData)
 
 # CLEAN DATA
 def processData():
@@ -453,54 +455,10 @@ def main():
         print("5: Search accidents by time(year, month, day)")
         print("6: Search accidents by conditions (temperature range and visibility range)")
         print("7: Quit")
-
         try:
             action = input()
             exit = menu_selection(action)
         except:
             print("An error has occurred. Please check that data is loaded and try again")
-
-
-
 # start of main program
 main()
-############################################################################
-def searchByDay(dayChoice):
-    if(dayChoice == 'NA'):
-        return df
-    dayChoiceAccidents = df['day'] = pd.DatetimeIndex(df['Start_Time']).day == dayChoice
-#    dayChoiceAccidents  = df['Daydd'] == dayChoice
-    dayTmpDF = df[dayChoiceAccidents]
-    dayTotalAccidents = len(dayTmpDF)
-    if (dayTotalAccidents == 0):
-        while dayTotalAccidents  == 0:
-            print("Your selection has no entries. Please type a number 1-12\n")
-            print("or type: NA, to avoid limiting your selection by a day")
-            dayChoice = input()
-            if(dayChoice == 'NA'):
-                dayTmpDF = df
-                break
-            dayTmpDF = df[dayChoiceAccidents]
-            dayTotalAccidents = len(dayTmpDF)
-    return dayTmpDF
-
-############################################################################
-def searchByYear(yearChoice):
-    if(yearChoice == 'NA'):
-        return df
-    yearChoiceAccidents = df['year'] = pd.DatetimeIndex(df['Start_Time']).year == yearChoice
-#    yearChoiceAccidents  = df['Daydd'] == yearChoice
-    yearTmpDF = df[yearChoiceAccidents]
-    yearTotalAccidents = len(yearTmpDF)
-    if (yearTotalAccidents == 0):
-        while yearTotalAccidents  == 0:
-            print("Your selection has no entries. Please type a number 1-12\n")
-            print("or type: NA, to avoid limiting your selection by a year")
-            yearChoice = input()
-            if(yearChoice == 'NA'):
-                yearTmpDF = df
-                break
-            yearTmpDF = df[yearChoiceAccidents]
-            yearTotalAccidents = len(yearTmpDF)
-    return yearTmpDF
-
