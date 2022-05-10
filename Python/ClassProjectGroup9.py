@@ -408,10 +408,18 @@ def searchAccidentsTime():
     print("the answer is: ",answer) 
 
 def searchAccidentsCondition():
-        minTemp = input("input the lowest temperture of the range")
-        maxTemp = input("input the highest temperture of the range")
-        minVisibility = input("input the lowest visibility of the range")
-        maxVisibility = input("input the  farthest visibility of the range")
+    minTemp = input("input the lowest temperture of the range")
+    maxTemp = input("input the highest temperture of the range")
+    minVisibility = input("input the lowest visibility of the range")
+    maxVisibility = input("input the  farthest visibility of the range")
+    tempAndVis = df['Temperature(F)'] > minTemp
+    tempAndVis = tempAndVis['Temperature(F)'] < maxTemp
+    tempAndVis = tempAndVis['Visibility'] < maxVisibility
+    tempAndVis = tempAndVis['Visibility'] > minVisibility
+    totalInRange = len(tempAndVis)
+    print("The number of accidents in specified tempature and visibility range is: ")
+    print(totalInRange)
+
 def menu_selection(action):
 
     try:
