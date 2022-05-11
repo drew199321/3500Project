@@ -11,15 +11,14 @@
 ############################################################################
 
 # from asyncio.windows_events import NULL
-import sys
 import warnings
 import csv
 from numpy import average
 import pandas as pd
 from datetime import datetime
 
-import warnings
-warnings.filterwarnings("ignore")
+with warnings.catch_warnings():
+    warnings.simplefilter(action = "ignore", category = FutureWarning)
 
 print("\nWelcome to a data processing application to find records of \n"
     "accidents that occurred in the U.S. from 2016 to 2021.\n\n"
@@ -34,22 +33,21 @@ def loadData():
     print("************************************")
     # Dataset = pd.read_csv("./Datasets/InputDataSample.csv")
     print('[', datetime.now(), '] Starting Script')
+    Dataset = pd.read_csv("US_Accidents_data.csv")
     global df
-    df = pd.read_csv("US_Accidents_data.csv")
-
-    # df = pd.DataFrame(Dataset)
- 
-    print(len(df))
+    df = pd.DataFrame(Dataset)
+    totalData = len(df)
+    print(totalData + "error?")
 
 # CLEAN DATA
 def processData():
     # Drop rows with missing data from any of the specified columns
     global df
-    df.dropna(subset=['ID', 'Severity', 'Zipcode', 'Start_Time',
+    dropRowsSingle = df.dropna(subset=['ID', 'Severity', 'Zipcode', 'Start_Time',
     'End_Time', 'Visibility(mi)', 'Weather_Condition', 'Country'], inplace=True) 
 
     # Drop Rows missing 3 columns
-    df.dropna(thresh=len(df.columns)-2, inplace=True)
+    dropRowsTriple = df.dropna(thresh=len(df.columns)-2, inplace=True)
 
     # Drop Rows where Distance = 0
     df = df.drop(df.loc[df['Distance(mi)'] == 0].index)
@@ -64,7 +62,6 @@ def processData():
     # # Tested with index 21 with zipcode: 41033-9698; output: 41033
     # print(zipCoder[21])
     print ("CLEANING IS COMPLETE")
-    print(len(df))
     return df
 
 
@@ -288,7 +285,7 @@ def searchAccidentsTime():
         monthChoiceAccidents = df
 ##**** need help with te following search
     else:
-        monthChoiceAccidents = df['Month'] = str(pd.DatetimeIndex(df['Start_Time']).month) == monthChoice
+        monthChoiceAccidents = df['Month'] = pd.DatetimeIndex(df['Start_Time']).month == monthChoice
         monthTmpDF = df[monthChoiceAccidents]
         monthTotalAccidents = len(monthTmpDF)
         if (monthTotalAccidents == 0):
@@ -355,23 +352,21 @@ def searchAccidentsTime():
     print("the answer is: ",answer) 
 
 def searchAccidentsCondition():
-    minTemp = float(input("input the lowest temperture of the range"))
-    maxTemp = float(input("input the highest temperture of the range"))
-    minVisibility = float(input("input the lowest visibility of the range"))
-    maxVisibility = float(input("input the  farthest visibility of the range"))
-    temperature = df[df['Temperature(F)'].between(minTemp,maxTemp, inclusive=True)]
-    # tempAndVis = tempAndVis['Temperature(F)'] < str()
-    Visi = temperature[temperature['Visibility(mi)'].between(minVisibility,maxVisibility, inclusive=True)]
-    # tempAndVis = tempAndVis['Visibility(mi)'] > str(minVisibility)
-    
-
+    minTemp = input("input the lowest temperture of the range")
+    maxTemp = input("input the highest temperture of the range")
+    minVisibility = input("input the lowest visibility of the range")
+    maxVisibility = input("input the  farthest visibility of the range")
+    tempAndVis = df['Temperature(F)'] > minTemp
+    tempAndVis = tempAndVis['Temperature(F)'] < maxTemp
+    tempAndVis = tempAndVis['Visibility(mi)'] < maxVisibility
+    tempAndVis = tempAndVis['Visibility(mi)'] > minVisibility
+    totalInRange = len(tempAndVis)
     print("The number of accidents in specified tempature and visibility range is: ")
-
-    print(len(Visi))
+    print(totalInRange)
 
 def menu_selection(action):
 
-    #try:
+    try:
         if(action =='1'):
             loadData()
             return False
@@ -392,9 +387,9 @@ def menu_selection(action):
             return False
         if(action =='7'):
             return True
-    #except:
-    #    print("Error: Invalid input. Please try again.")
-    #    return False
+    except:
+        print("Error: Invalid input. Please try again.")
+        return False
 
 # definition for main
 loaded = False
@@ -412,10 +407,10 @@ def main():
         print("5: Search accidents by time(year, month, day)")
         print("6: Search accidents by conditions (temperature range and visibility range)")
         print("7: Quit")
-    #    try:
-        action = str(input())
-        exit = menu_selection(action)
-    #    except:
-    #        print("An error has occurred. Please check that data is loaded and try again")
+        try:
+            action = input()
+            exit = menu_selection(action)
+        except:
+            print("An error has occurred. Please check that data is loaded and try again")
 # start of main program
 main()
