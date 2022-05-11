@@ -17,8 +17,8 @@ import csv
 from numpy import average
 import pandas as pd
 from datetime import datetime
+import time
 
-import warnings
 warnings.filterwarnings("ignore")
 
 print("\nWelcome to a data processing application to find records of \n"
@@ -30,21 +30,31 @@ print("\nWelcome to a data processing application to find records of \n"
 df = 0
 
 def loadData():
+    start_time = time.time()
     print("Loading and cleaning input data set:")
     print("************************************")
-    # Dataset = pd.read_csv("./Datasets/InputDataSample.csv")
     print('[', datetime.now(), '] Starting Script')
     global df
-    df = pd.read_csv("US_Accidents_data.csv")
-
-    # df = pd.DataFrame(Dataset)
- 
-    print(len(df))
+    csv_file = "US_Accidents_data.csv"
+    df = pd.read_csv(csv_file)
+    print('[', datetime.now(), '] Loading', csv_file)  
+    print('[', datetime.now(), '] Total Columns Read:', len(df.columns)) 
+    print('[', datetime.now(), '] Total Rows Read:', len(df))
+    end_time = time.time()
+    global time_to_load
+    time_to_load = end_time - start_time
+    print ('Time to load is:', round(time_to_load, 4), 'seconds\n')
+    return time_to_load
 
 # CLEAN DATA
 def processData():
+    start_time = time.time()
     # Drop rows with missing data from any of the specified columns
     global df
+    print("Loading and cleaning input data set:")
+    print("************************************")
+    print('[', datetime.now(), '] Performing Data Cleanup')
+
     df.dropna(subset=['ID', 'Severity', 'Zipcode', 'Start_Time',
     'End_Time', 'Visibility(mi)', 'Weather_Condition', 'Country'], inplace=True) 
 
@@ -63,66 +73,106 @@ def processData():
     # zipCoder = df['Zipcode'].str[:5]
     # # Tested with index 21 with zipcode: 41033-9698; output: 41033
     # print(zipCoder[21])
-    print ("CLEANING IS COMPLETE")
-    print(len(df))
-    return df
+    
+    print('[', datetime.now(), '] Total Rows Read after cleaning is:', len(df))
+    end_time = time.time()
+    global time_to_process
+    time_to_process = end_time - start_time
+    print('Time to process is:', round(time_to_process, 4), '\n')
+    return df, time_to_process
 
 
     #**************************************
     # starting functions that answer the questions
     # 1. In what month were there more accidents reported?
 def prompt1():
-    print("Prompt 1:")
+    print('\nPrompt 1:')
     months = df['month'] = pd.DatetimeIndex(df['Start_Time']).month
+    print('[', datetime.now(), '] In what month were there more accidents '
+        'reported?')
+    # print("Prompt 1:")
     month = months.value_counts()[:1].index.to_list()
-    print(f"The month with the most accidents is: {month[0]}\n")
+    # print('[', datetime.now(), ']', {month[0]}, '\n')
+    if ({month[0]} == 1):
+        print('[', datetime.now(), '] January')
+    elif ({month[0]} == 2):
+        print('[', datetime.now(), '] February')
+    elif ({month[0]} == 3):
+        print('[', datetime.now(), '] March')
+    elif ({month[0]} == 4):
+        print('[', datetime.now(), '] April')
+    elif ({month[0]} == 5):
+        print('[', datetime.now(), '] May')
+    elif ({month[0]} == 6):
+        print('[', datetime.now(), '] June')
+    elif ({month[0]} == 7):
+        print('[', datetime.now(), '] July')
+    elif ({month[0]} == 8):
+        print('[', datetime.now(), '] August')
+    elif ({month[0]} == 9):
+        print('[', datetime.now(), '] September')
+    elif ({month[0]} == 10):
+        print('[', datetime.now(), '] October')
+    elif ({month[0]} == 11):
+        print('[', datetime.now(), '] November')
+    else: 
+        print('[', datetime.now(), '] December')
 
 # 2. What is the state that had the most accidents in 2020?
 def prompt2():
-    print("Prompt 2:")
+    print('\nPrompt 2')
+    print('[', datetime.now(), '] What is the state that had the most '
+        'accidents in 2020?')
     years = df['years'] = pd.DatetimeIndex(df['Start_Time']).year
     acc2020 = df[years == 2020]
     state2020 = acc2020['State'].value_counts()[:1].index.to_list()
-    print(f"The state with the most accidents in the year 2020 is: {state2020}\n")
+    print('[', datetime.now(), ']', state2020)
+    # print(f"The state with the most accidents in the year 2020 is: {state2020}\n")
 
 # 3. What is the state that had the most accidents of severity 2 in 2021?
 def prompt3():
-    print("Prompt 3:")
+    print("\nPrompt 3:")
+    print('[', datetime.now(), '] What is the state that had the most accidents'  
+        'of severity 2 in 2021?')
     years = df['years'] = pd.DatetimeIndex(df['Start_Time']).year
     acc2021 = df[years == 2021]
     severity2 = acc2021['Severity'] == 2
-    # print(type(severity2))
-    # print(type(acc2021))
 
     state1 = acc2021[severity2]
     state2 = state1['State'].value_counts()[:1].index.to_list()
-   
-    print(f"The state with the most accidents of severity 2 in 2021 is: {state2}\n")
+    print('[', datetime.now(), ']', state2)
+    # print(f"The state with the most accidents of severity 2 in 2021 is: {state2}\n")
 
 
 # 4. What severity is the most common in Virginia?
 def prompt4():
-    print("Prompt 4")
+    print("\nPrompt 4:")
+    print('[', datetime.now(), '] What severity is the most common in Virginia?')
     stateVirginia = df['State'] == "VA"
     virginiaColumns = df[stateVirginia]
     virginiaSeverity = virginiaColumns['Severity'].value_counts()[:1].index.to_list()
-    print(f"The most common severity in Virginia is: {virginiaSeverity}\n")
+    print('[', datetime.now(), ']', virginiaSeverity)
 
 # 5. What are the 5 cities that had the most accidents in 2019 in California?
 def prompt5():
-    print("Prompt 5")
+    print("\nPrompt 5")
+    print('[', datetime.now(), '] What are the 5 cities that had the most'
+        'accidents in 2019 in California?')
     years = df['years'] = pd.DatetimeIndex(df['Start_Time']).year
     stateCalifornia = df['State'] == "CA"
     acc2019 = df[years == 2019]
     # print(acc2019)
     caliAccidents2019 = acc2019[stateCalifornia]
     topCaliforniaCities = caliAccidents2019['City'].value_counts().head() 
-    print(f"The 5 cities in California that had the most accidents in 2019 are:\n{topCaliforniaCities}\n")
+    print('[', datetime.now(), ']\n', topCaliforniaCities)
+    # print(f"The 5 cities in California that had the most accidents in 2019 are:\n{topCaliforniaCities}\n")
 
 # 6. What was the average humidity and average temperature of all accidents of 
 # severity 4 that occurred in 2021?
 def prompt6():
-    print("Prompt 6:")
+    print("\nPrompt 6:")
+    print('[', datetime.now(), '] What was the average humidity and average'
+        'temperature of all accidents of severity 4 that occurred in 2021?')
     years = df['years'] = pd.DatetimeIndex(df['Start_Time']).year
     acc2021 = df[years == 2021]
     # Severity of 4
@@ -135,32 +185,42 @@ def prompt6():
     tempSevFour = yearAndSeverity['Temperature(F)'].mean()
 
     # average temperature and humidity for accidents w/ a severity of 4 in 2021
-    print("For accidents with severity 4 that occured in 2021: ")
-    print('average humidity: ', humiditySevFour)
-    print('average temp: ', tempSevFour, "\n")
+    print('[', datetime.now(), ']')
+    print('Average humidity: ', humiditySevFour)
+    print('Average temp: ', tempSevFour)
+    # print("For accidents with severity 4 that occured in 2021: ")
 
 # 7. What are the 3 most common weather conditions (weather_conditions) when accidents occurred?
 def prompt7():
-    print("Prompt 7:")
-    print("The 3 most common weather conditions are: ")
+    print("\nPrompt 7:")
+    print('[', datetime.now(), '] What are the 3 most common weather conditions'
+        '(weather_conditions) when accidents occurred?')
+    
     weatherConditions = df['Weather_Condition'].value_counts().head(3) 
-    print(weatherConditions, "\n")
+    print('[', datetime.now(), ']\n', weatherConditions)
+    # print("The 3 most common weather conditions are: ")
+    # print(weatherConditions, "\n")
 
 # 8. What was the maximum visibility of all accidents of severity 2 that occurred in the state of New Hampshire?
 def prompt8():
-    print("Prompt 8:")
+    print("\nPrompt 8:")
+    print('[', datetime.now(), '] What was the maximum visibility of all'
+        'accidents of severity 2 that occurred in the state of New Hampshire?')
     stateNewHampshire = df['State'] == "NH"
     tempDF = df[stateNewHampshire]
     severity = df['Severity'] == 2
     stateSeverity = tempDF[severity]
     visibility = stateSeverity['Visibility(mi)'].max()
     # print(df)
-    print(f"The maximum visibility of all accidents of severity 2 that occurred in the state of New Hampshire: {visibility}\n")
+    print('[', datetime.now(), ']', visibility)
+    # print(f"The maximum visibility of all accidents of severity 2 that occurred in the state of New Hampshire: {visibility}\n")
     # print(visibility)
 
 # 9. How many accidents of each severity were recorded in Bakersfield?
 def prompt9():
-    print("Prompt 9:")
+    print("\nPrompt 9:")
+    print('[', datetime.now(), '] How many accidents of each severity were '
+        'recorded in Bakersfield?')
     bakersfield = df['City'] == "Bakersfield"
     severityBak1 = df['Severity'] == 1
     severityBak2 = df['Severity'] == 2
@@ -180,6 +240,7 @@ def prompt9():
     bakersfieldSev4 = len(tmpDF[severityBak4])
 
     # print(type(bakersfieldSev1))
+    print('[', datetime.now(), ']')
     print("Accidents in Bakersfield with Severity 1: ", bakersfieldSev1)
     print("Accidents in Bakersfield with Severity 2: ", bakersfieldSev2)
     print("Accidents in Bakersfield with Severity 3: ", bakersfieldSev3)
@@ -187,8 +248,10 @@ def prompt9():
 
 # 10 What was the longest accident (in hours) recorded in Florida in the Spring (March, April, and May) of 2020?
 def prompt10():
-    print("10. What was the longest accident (in hours) recorded in Florida in"
-        " the Spring (March, April, and May) of 2020?")
+    print('\nPrompt 10:')
+    print('[', datetime.now(), '] What was the longest accident (in hours) recorded in Florida in'
+        'the Spring (March, April, and May) of 2020?')
+    
     # gather the start, end, and state from the dataset
     longest_acc_fl = df.loc[:, ('Start_Time', 'End_Time', 'State')]
     # get state: Florida
@@ -223,10 +286,13 @@ def prompt10():
         # round the result for better readability 
         acc_2020_fl = round(time_in_hours, 2)
     # print the solution
-    print(acc_2020_fl, "Hours.")
+    print('[', datetime.now(), ']', acc_2020_fl, 'Hrs\n')
+    # print(acc_2020_fl, "Hours.")
 
 #**************************************
 def printAnswers():
+    global time_to_prompt
+    start_time = time.time()
     prompt1()
     prompt2()
     prompt3()
@@ -237,11 +303,18 @@ def printAnswers():
     prompt8()
     prompt9()
     prompt10()
+    end_time = time.time()
+    time_to_prompt = end_time - start_time
+    return time_to_prompt
+
+    
+#STILL Need to work on time in this function<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 #**************************************
 # associated with choice 4 on menu
 def searchAccidentsPlace():
-
+    global time_query_one
+    start_time = time.time()
     print("Please type the name of the city you would like to search.\n") 
     cityChoice = input()
     if(cityChoice != 'NA'):
@@ -274,6 +347,9 @@ def searchAccidentsPlace():
     zipTotalAccidents = len(zipTmpDF) 
     print("The number of accidents in " + zipChoice + " was: ")
     print(zipTotalAccidents)
+    end_time = time.time()
+    time_query_one = end_time - start_time
+    return time_query_one
 
 
 
@@ -347,6 +423,8 @@ def menu_selection(action):
             searchAccidentsCondition()
             return False
         if(action =='7'):
+            total_time = time_to_load + time_to_process + time_to_prompt + time_query_one
+            print('Total Running Time:', total_time)
             return True
     except:
         print("Error: Invalid input. Please try again.")
