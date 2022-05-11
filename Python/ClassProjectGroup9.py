@@ -22,10 +22,10 @@ import time
 warnings.filterwarnings("ignore")
 
 print("\nWelcome to a data processing application to find records of \n"
-    "accidents that occurred in the U.S. from 2016 to 2021.\n\n"
-    "> You will need to (1) load the information first and then\n"
-    "> (2) Process the data before you can search.\n"
-    "*****************************************************************")
+        "accidents that occurred in the U.S. from 2016 to 2021.\n\n"
+        "> You will need to (1) load the information first and then\n"
+        "> (2) Process the data before you can search.\n"
+        "*****************************************************************")
 # Define global set here
 df = 0
 
@@ -56,7 +56,7 @@ def processData():
     print('[', datetime.now(), '] Performing Data Cleanup')
 
     df.dropna(subset=['ID', 'Severity', 'Zipcode', 'Start_Time',
-    'End_Time', 'Visibility(mi)', 'Weather_Condition', 'Country'], inplace=True) 
+        'End_Time', 'Visibility(mi)', 'Weather_Condition', 'Country'], inplace=True) 
 
     # Drop Rows missing 3 columns
     df.dropna(thresh=len(df.columns)-2, inplace=True)
@@ -73,7 +73,7 @@ def processData():
     # zipCoder = df['Zipcode'].str[:5]
     # # Tested with index 21 with zipcode: 41033-9698; output: 41033
     # print(zipCoder[21])
-    
+
     print('[', datetime.now(), '] Total Rows Read after cleaning is:', len(df))
     end_time = time.time()
     global time_to_process
@@ -82,14 +82,14 @@ def processData():
     return df, time_to_process
 
 
-    #**************************************
+#**************************************
     # starting functions that answer the questions
     # 1. In what month were there more accidents reported?
 def prompt1():
     print('\nPrompt 1:')
     months = df['month'] = pd.DatetimeIndex(df['Start_Time']).month
     print('[', datetime.now(), '] In what month were there more accidents '
-        'reported?')
+            'reported?')
     # print("Prompt 1:")
     month = months.value_counts()[:1].index.to_list()
     # print('[', datetime.now(), ']', {month[0]}, '\n')
@@ -122,7 +122,7 @@ def prompt1():
 def prompt2():
     print('\nPrompt 2')
     print('[', datetime.now(), '] What is the state that had the most '
-        'accidents in 2020?')
+            'accidents in 2020?')
     years = df['years'] = pd.DatetimeIndex(df['Start_Time']).year
     acc2020 = df[years == 2020]
     state2020 = acc2020['State'].value_counts()[:1].index.to_list()
@@ -133,7 +133,7 @@ def prompt2():
 def prompt3():
     print("\nPrompt 3:")
     print('[', datetime.now(), '] What is the state that had the most accidents'  
-        'of severity 2 in 2021?')
+            'of severity 2 in 2021?')
     years = df['years'] = pd.DatetimeIndex(df['Start_Time']).year
     acc2021 = df[years == 2021]
     severity2 = acc2021['Severity'] == 2
@@ -157,7 +157,7 @@ def prompt4():
 def prompt5():
     print("\nPrompt 5")
     print('[', datetime.now(), '] What are the 5 cities that had the most'
-        'accidents in 2019 in California?')
+            'accidents in 2019 in California?')
     years = df['years'] = pd.DatetimeIndex(df['Start_Time']).year
     stateCalifornia = df['State'] == "CA"
     acc2019 = df[years == 2019]
@@ -172,7 +172,7 @@ def prompt5():
 def prompt6():
     print("\nPrompt 6:")
     print('[', datetime.now(), '] What was the average humidity and average'
-        'temperature of all accidents of severity 4 that occurred in 2021?')
+            'temperature of all accidents of severity 4 that occurred in 2021?')
     years = df['years'] = pd.DatetimeIndex(df['Start_Time']).year
     acc2021 = df[years == 2021]
     # Severity of 4
@@ -194,8 +194,8 @@ def prompt6():
 def prompt7():
     print("\nPrompt 7:")
     print('[', datetime.now(), '] What are the 3 most common weather conditions'
-        '(weather_conditions) when accidents occurred?')
-    
+            '(weather_conditions) when accidents occurred?')
+
     weatherConditions = df['Weather_Condition'].value_counts().head(3) 
     print('[', datetime.now(), ']\n', weatherConditions)
     # print("The 3 most common weather conditions are: ")
@@ -205,7 +205,7 @@ def prompt7():
 def prompt8():
     print("\nPrompt 8:")
     print('[', datetime.now(), '] What was the maximum visibility of all'
-        'accidents of severity 2 that occurred in the state of New Hampshire?')
+            'accidents of severity 2 that occurred in the state of New Hampshire?')
     stateNewHampshire = df['State'] == "NH"
     tempDF = df[stateNewHampshire]
     severity = df['Severity'] == 2
@@ -220,7 +220,7 @@ def prompt8():
 def prompt9():
     print("\nPrompt 9:")
     print('[', datetime.now(), '] How many accidents of each severity were '
-        'recorded in Bakersfield?')
+            'recorded in Bakersfield?')
     bakersfield = df['City'] == "Bakersfield"
     severityBak1 = df['Severity'] == 1
     severityBak2 = df['Severity'] == 2
@@ -250,8 +250,8 @@ def prompt9():
 def prompt10():
     print('\nPrompt 10:')
     print('[', datetime.now(), '] What was the longest accident (in hours) recorded in Florida in'
-        'the Spring (March, April, and May) of 2020?')
-    
+            'the Spring (March, April, and May) of 2020?')
+
     # gather the start, end, and state from the dataset
     longest_acc_fl = df.loc[:, ('Start_Time', 'End_Time', 'State')]
     # get state: Florida
@@ -307,51 +307,60 @@ def printAnswers():
     time_to_prompt = end_time - start_time
     return time_to_prompt
 
-    
+
 #STILL Need to work on time in this function<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 #**************************************
 # associated with choice 4 on menu
 def searchAccidentsPlace():
     global time_query_one
-    start_time = time.time()
     print("Please type the name of the city you would like to search.\n") 
     cityChoice = input()
     if(cityChoice != 'NA'):
+        start_time = time.time()
         cityChoiceAccidents  = df['City'] == cityChoice
     else: 
+        start_time = time.time()
         cityChoiceAccidents = df
     cityTmpDF = df[cityChoiceAccidents]
     cityTotalAccidents = len(cityTmpDF)
     print("The number of accidents in " + cityChoice + " was: ")
     print(cityTotalAccidents)
+    end_time = time.time()
+    cityTime =end_time - start_time
 
     print("Please type the name of the state you would like to search.\n") 
     stateChoice = input()
     if(stateChoice != 'NA'):
+        start_time = time.time()
         stateChoiceAccidents  = df['State'] == stateChoice
     else:
+        start_time = time.time()
         stateChoiceAccidents = df 
     stateTmpDF = df[stateChoiceAccidents]
     stateTotalAccidents = len(stateTmpDF)
     print("The number of accidents in " + stateChoice + " was: ")
     print(stateTotalAccidents)
+    end_time = time.time()
+    stateTime = end_time - start_time
 
     print("Please type the zip code you would like to search.\n") 
     zipChoice = input()
     if(zipChoice != 'NA'):
+        start_time = time.time()
         zipChoiceAccidents  = df['Zipcode'] == zipChoice
     else:        
+        start_time = time.time()
         zipChoiceAccidents = df
-    zipTmpDF = df[stateChoiceAccidents]
+    zipTmpDF = df[zipChoiceAccidents]
     zipTotalAccidents = len(zipTmpDF) 
     print("The number of accidents in " + zipChoice + " was: ")
     print(zipTotalAccidents)
     end_time = time.time()
-    time_query_one = end_time - start_time
+    zipTime = end_time - start_time
+    time_query_one = cityTime + stateTime + zipTime
+    print("Time for place search : ", time_query_one)
     return time_query_one
-
-
 
 ############################################################################
 def searchAccidentsTime():
@@ -395,7 +404,7 @@ def searchAccidentsCondition():
     temperature = df[df['Temperature(F)'].between(minTemp,maxTemp, inclusive=True)]
     Visi = temperature[temperature['Visibility(mi)'].between(minVisibility,maxVisibility, inclusive=True)]
 
-    
+
 
     print("The number of accidents in specified tempature and visibility range is: ")
 
