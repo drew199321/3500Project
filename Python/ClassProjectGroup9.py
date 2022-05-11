@@ -286,26 +286,27 @@ def searchAccidentsTime():
     yearChoice = input("Please type the year: ")
     monthChoice = input("Please type the month(as an integer for which month. E.G. Jan is 1, Feb is 2, etc.): ")
     dayChoice = input("Please type the day: ")
-    
-    print(type(df['Start_Time'].dt.year))
-    if(yearChoice == monthChoice == dayChoice == 'NA'):
-        print("Error: All fields entered as NA")
-    else:
-        if(yearChoice == 'NA'):
-            dfYear = df
+    try:
+        if(yearChoice == monthChoice == dayChoice == 'NA'):
+            print("Error: All fields entered as NA")
         else:
-            dfYear = df[df['Start_Time'].dt.year.eq(int(yearChoice))]
-        if(monthChoice == 'NA'):
-            dfMonth = dfYear 
-        else:
-            dfMonth = dfYear[dfYear['Start_Time'].dt.month.eq(int(monthChoice))]
-        if(dayChoice == 'NA'):
-            dfDay = dfMonth
-        else:
-            dfDay = dfDay[dfMonth['Start_Time'].dt.day.eq(int(dayChoice))]
+            if(yearChoice == 'NA'):
+                dfYear = df
+            else:
+                dfYear = df[df['Start_Time'].dt.year.eq(int(yearChoice))]
+            if(monthChoice == 'NA'):
+                dfMonth = dfYear 
+            else:
+                dfMonth = dfYear[dfYear['Start_Time'].dt.month.eq(int(monthChoice))]
+            if(dayChoice == 'NA'):
+                dfDay = dfMonth
+            else:
+                dfDay = dfDay[dfMonth['Start_Time'].dt.day.eq(int(dayChoice))]
 
-        print("The number of accidents in this timeframe is: ")
-        print(len(dfDay))
+            print("The number of accidents in this timeframe is: ")
+            print(len(dfDay))
+    except:
+        print("An error has occurred. Please enter a valid input and try again.")
 
 
 
@@ -316,9 +317,8 @@ def searchAccidentsCondition():
     minVisibility = float(input("input the lowest visibility of the range"))
     maxVisibility = float(input("input the  farthest visibility of the range"))
     temperature = df[df['Temperature(F)'].between(minTemp,maxTemp, inclusive=True)]
-    # tempAndVis = tempAndVis['Temperature(F)'] < str()
     Visi = temperature[temperature['Visibility(mi)'].between(minVisibility,maxVisibility, inclusive=True)]
-    # tempAndVis = tempAndVis['Visibility(mi)'] > str(minVisibility)
+
     
 
     print("The number of accidents in specified tempature and visibility range is: ")
@@ -327,7 +327,7 @@ def searchAccidentsCondition():
 
 def menu_selection(action):
 
-    #try:
+    try:
         if(action =='1'):
             loadData()
             return False
@@ -348,9 +348,9 @@ def menu_selection(action):
             return False
         if(action =='7'):
             return True
-    #except:
-    #    print("Error: Invalid input. Please try again.")
-    #    return False
+    except:
+        print("Error: Invalid input. Please try again.")
+        return False
 
 # definition for main
 loaded = False
@@ -368,10 +368,10 @@ def main():
         print("5: Search accidents by time(year, month, day)")
         print("6: Search accidents by conditions (temperature range and visibility range)")
         print("7: Quit")
-    #    try:
-        action = str(input())
-        exit = menu_selection(action)
-    #    except:
-    #        print("An error has occurred. Please check that data is loaded and try again")
+        try:
+            action = str(input())
+            exit = menu_selection(action)
+        except:
+            print("An error has occurred. Please check that data is loaded and try again")
 # start of main program
 main()
