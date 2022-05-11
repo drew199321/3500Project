@@ -37,7 +37,7 @@ def loadData():
     global df
     df = pd.DataFrame(Dataset)
     totalData = len(df)
-    print(totalData + "error?")
+    print(str(totalData))
 
 # CLEAN DATA
 def processData():
@@ -408,7 +408,7 @@ def main():
         print("6: Search accidents by conditions (temperature range and visibility range)")
         print("7: Quit")
         try:
-            action = input()
+            action = str(input())
             exit = menu_selection(action)
         except:
             print("An error has occurred. Please check that data is loaded and try again")
