@@ -72,35 +72,32 @@ def processData():
     # starting functions that answer the questions
     # 1. In what month were there more accidents reported?
 def prompt1():
-    print("Prompt 1")
+    print("Prompt 1:")
     months = df['month'] = pd.DatetimeIndex(df['Start_Time']).month
-    print(months.value_counts().head(1))
+    month = months.value_counts()[:1].index.to_list()
+    print(f"The month with the most accidents is: {month[0]}\n")
 
 # 2. What is the state that had the most accidents in 2020?
 def prompt2():
-    print("Prompt 2")
+    print("Prompt 2:")
     years = df['years'] = pd.DatetimeIndex(df['Start_Time']).year
     acc2020 = df[years == 2020]
-    state2020 = acc2020['State'].value_counts().head(1)
-    print(state2020)
+    state2020 = acc2020['State'].value_counts()[:1].index.to_list()
+    print(f"The state with the most accidents in the year 2020 is: {state2020}\n")
 
 # 3. What is the state that had the most accidents of severity 2 in 2021?
 def prompt3():
-    print("Prompt 3")
+    print("Prompt 3:")
     years = df['years'] = pd.DatetimeIndex(df['Start_Time']).year
     acc2021 = df[years == 2021]
     severity2 = acc2021['Severity'] == 2
-    print(type(severity2))
-    print(type(acc2021))
+    # print(type(severity2))
+    # print(type(acc2021))
 
     state1 = acc2021[severity2]
-    state2 = state1['State']
-    # state2 = severity2[acc2021]
-    # print(acc2021)
-    # print(severity2)
-    # print(state1)
-    print(state2)
-    # print(df)
+    state2 = state1['State'].value_counts()[:1].index.to_list()
+   
+    print(f"The state with the most accidents of severity 2 in 2021 is: {state2}\n")
 
 
 # 4. What severity is the most common in Virginia?
@@ -108,8 +105,8 @@ def prompt4():
     print("Prompt 4")
     stateVirginia = df['State'] == "VA"
     virginiaColumns = df[stateVirginia]
-    virginiaSeverity = virginiaColumns['Severity'].value_counts().head()
-    print(virginiaSeverity)
+    virginiaSeverity = virginiaColumns['Severity'].value_counts()[:1].index.to_list()
+    print(f"The most common severity in Virginia is: {virginiaSeverity}\n")
 
 # 5. What are the 5 cities that had the most accidents in 2019 in California?
 def prompt5():
@@ -120,12 +117,12 @@ def prompt5():
     # print(acc2019)
     caliAccidents2019 = acc2019[stateCalifornia]
     topCaliforniaCities = caliAccidents2019['City'].value_counts().head() 
-    print(topCaliforniaCities)
+    print(f"The 5 cities in California that had the most accidents in 2019 are:\n{topCaliforniaCities}\n")
 
 # 6. What was the average humidity and average temperature of all accidents of 
 # severity 4 that occurred in 2021?
 def prompt6():
-    print("Prompt 6")
+    print("Prompt 6:")
     years = df['years'] = pd.DatetimeIndex(df['Start_Time']).year
     acc2021 = df[years == 2021]
     # Severity of 4
@@ -138,30 +135,32 @@ def prompt6():
     tempSevFour = yearAndSeverity['Temperature(F)'].mean()
 
     # average temperature and humidity for accidents w/ a severity of 4 in 2021
+    print("For accidents with severity 4 that occured in 2021: ")
     print('average humidity: ', humiditySevFour)
-    print('average temp: ', tempSevFour)
+    print('average temp: ', tempSevFour, "\n")
 
 # 7. What are the 3 most common weather conditions (weather_conditions) when accidents occurred?
 def prompt7():
-    print("Prompt 7")
+    print("Prompt 7:")
+    print("The 3 most common weather conditions are: ")
     weatherConditions = df['Weather_Condition'].value_counts().head(3) 
-    print(weatherConditions)
+    print(weatherConditions, "\n")
 
 # 8. What was the maximum visibility of all accidents of severity 2 that occurred in the state of New Hampshire?
 def prompt8():
-    print("Prompt 8")
+    print("Prompt 8:")
     stateNewHampshire = df['State'] == "NH"
     tempDF = df[stateNewHampshire]
     severity = df['Severity'] == 2
     stateSeverity = tempDF[severity]
     visibility = stateSeverity['Visibility(mi)'].max()
     # print(df)
-    print("The maximum visibility of all accidents of severity 2 that occurred in the state of New Hampshire:")
-    print(visibility)
+    print(f"The maximum visibility of all accidents of severity 2 that occurred in the state of New Hampshire: {visibility}\n")
+    # print(visibility)
 
 # 9. How many accidents of each severity were recorded in Bakersfield?
 def prompt9():
-    print("Prompt 9")
+    print("Prompt 9:")
     bakersfield = df['City'] == "Bakersfield"
     severityBak1 = df['Severity'] == 1
     severityBak2 = df['Severity'] == 2
@@ -170,17 +169,17 @@ def prompt9():
 
     tmpDF = df[bakersfield]
 
-    print(df)
-    print(severityBak1)
-    print(type(severityBak1))
-    print(type(tmpDF))
+    # print(df)
+    # print(severityBak1)
+    # print(type(severityBak1))
+    # print(type(tmpDF))
 
     bakersfieldSev1 = len(tmpDF[severityBak1])
     bakersfieldSev2 = len(tmpDF[severityBak2])
     bakersfieldSev3 = len(tmpDF[severityBak3])
     bakersfieldSev4 = len(tmpDF[severityBak4])
 
-    print(type(bakersfieldSev1))
+    # print(type(bakersfieldSev1))
     print("Accidents in Bakersfield with Severity 1: ", bakersfieldSev1)
     print("Accidents in Bakersfield with Severity 2: ", bakersfieldSev2)
     print("Accidents in Bakersfield with Severity 3: ", bakersfieldSev3)
