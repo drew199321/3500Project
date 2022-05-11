@@ -283,76 +283,33 @@ def searchAccidentsTime():
     print("You will be given the opportunity to search by month, day, and year.\n")
     print("If you only want to limit your search by one or two factors,  \n")  
     print("type: NA, when given those options.")
-    monthChoice = input("Please type the month: ")
-    if(monthChoice == 'NA'):
-        monthChoiceAccidents = df
-##**** need help with te following search
+
+    yearChoice = input("Please type the year: ")
+    monthChoice = input("Please type the month(as an integer for which month. E.G. Jan is 1, Feb is 2, etc.): ")
+    dayChoice = input("Please type the day: ")
+    
+    print(type(df['Start_Time'].dt.year))
+    if(yearChoice == monthChoice == dayChoice == 'NA'):
+        print("Error: All fields entered as NA")
     else:
-        monthChoiceAccidents = df['Month'] = str(pd.DatetimeIndex(df['Start_Time']).month) == monthChoice
-        monthTmpDF = df[monthChoiceAccidents]
-        monthTotalAccidents = len(monthTmpDF)
-        if (monthTotalAccidents == 0):
-            while monthTotalAccidents  == 0:
-                print("Your selection has no entries. Please type a number 1-12\n")
-                print("or type: NA, to avoid limiting your selection by a month")
-                monthChoice = input()
-                if(monthChoice == 'NA'):
-                    monthChoiceAccidents  = df
-                break
-            monthChoiceAccidents = df[monthChoice]
-            monthTotalAccidents = len(monthChoiceAccidents)
-# monthChoiceaccidents is varible used for complete search at end of searchAccidentsTime function
-############################################################################
-    if( dayChoice == 'NA'):
-        dayChoiceAccidents = DF
-### need help with following line
-    else:
-        dayChoiceAccidents = df['day'] = pd.DatetimeIndex(df['Start_Time']).day == dayChoice
-        dayTmpDF = currentDF[dayChoiceAccidents]
-    dayTotalAccidents = len(dayTmpDF)
-    if (dayTotalAccidents == 0):
-        while dayTotalAccidents  == 0:
-            print("Your selection has no entries. Please type a number 1-31\n")
-            print("or type: NA, to avoid limiting your selection by a day")
-            dayChoice = input()
-            if(dayChoice == 'NA'):
-                dayTmpDF = df
-                break
-            dayTmpDF = df[dayChoiceAccidents]
-            dayTotalAccidents = len(dayTmpDF)
-    return dayTmpDF
+        if(yearChoice == 'NA'):
+            dfYear = df
+        else:
+            dfYear = df[df['Start_Time'].dt.year.eq(int(yearChoice))]
+        if(monthChoice == 'NA'):
+            dfMonth = dfYear 
+        else:
+            dfMonth = dfYear[dfYear['Start_Time'].dt.month.eq(int(monthChoice))]
+        if(dayChoice == 'NA'):
+            dfDay = dfMonth
+        else:
+            dfDay = dfDay[dfMonth['Start_Time'].dt.day.eq(int(dayChoice))]
 
-    answer = len(monthDF)
-    print("the answer is: ",answer) 
-
-    day = input("Please type the day: ")
-    dayDF = searchByDay(monthDF, day)
-    answer = len(dayDF)
-    print("the answer is: ",answer) 
+        print("The number of accidents in this timeframe is: ")
+        print(len(dfDay))
 
 
-    year = input("Please type the year you would like to search") 
-    yearDF = searchByYear(dayDF, year)
-    if(yearChoice == 'NA'):
-        return currentDF
-    ### need help with following line
-    yearChoiceAccidents = df['year'] = pd.DatetimeIndex(df['Start_Time']).year == yearChoice
-    yearTmpDF = df[yearChoiceAccidents]
-    yearTotalAccidents = len(yearTmpDF)
-    if (yearTotalAccidents == 0):
-        while yearTotalAccidents  == 0:
-            print("Please type a number 2016 to 2021\n")
-            print("or type: NA, to avoid limiting your selection by a year")
-            yearChoice = input()
-            if(yearChoice == 'NA'):
-                yearTmpDF = df
-                break
-            yearTmpDF = df[yearChoiceAccidents]
-            yearTotalAccidents = len(yearTmpDF)
-    return yearTmpDF
 
-    answer = len(yearDF)
-    print("the answer is: ",answer) 
 
 def searchAccidentsCondition():
     minTemp = float(input("input the lowest temperture of the range"))
