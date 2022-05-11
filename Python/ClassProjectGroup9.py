@@ -287,7 +287,7 @@ def searchAccidentsTime():
         monthChoiceAccidents = df
 ##**** need help with te following search
     else:
-        monthChoiceAccidents = df['Month'] = pd.DatetimeIndex(df['Start_Time']).month == monthChoice
+        monthChoiceAccidents = df['Month'] = str(pd.DatetimeIndex(df['Start_Time']).month) == monthChoice
         monthTmpDF = df[monthChoiceAccidents]
         monthTotalAccidents = len(monthTmpDF)
         if (monthTotalAccidents == 0):
@@ -354,17 +354,19 @@ def searchAccidentsTime():
     print("the answer is: ",answer) 
 
 def searchAccidentsCondition():
-    minTemp = input("input the lowest temperture of the range")
-    maxTemp = input("input the highest temperture of the range")
-    minVisibility = input("input the lowest visibility of the range")
-    maxVisibility = input("input the  farthest visibility of the range")
-    tempAndVis = df['Temperature(F)'] > minTemp
-    tempAndVis = tempAndVis['Temperature(F)'] < maxTemp
-    tempAndVis = tempAndVis['Visibility(mi)'] < maxVisibility
-    tempAndVis = tempAndVis['Visibility(mi)'] > minVisibility
-    totalInRange = len(tempAndVis)
+    minTemp = float(input("input the lowest temperture of the range"))
+    maxTemp = float(input("input the highest temperture of the range"))
+    minVisibility = float(input("input the lowest visibility of the range"))
+    maxVisibility = float(input("input the  farthest visibility of the range"))
+    temperature = df[df['Temperature(F)'].between(minTemp,maxTemp, inclusive=True)]
+    # tempAndVis = tempAndVis['Temperature(F)'] < str()
+    Visi = temperature[temperature['Visibility(mi)'].between(minVisibility,maxVisibility, inclusive=True)]
+    # tempAndVis = tempAndVis['Visibility(mi)'] > str(minVisibility)
+    
+
     print("The number of accidents in specified tempature and visibility range is: ")
-    print(totalInRange)
+
+    print(len(Visi))
 
 def menu_selection(action):
 
