@@ -20,12 +20,11 @@ from datetime import datetime
 with warnings.catch_warnings():
     warnings.simplefilter(action = "ignore", category = FutureWarning)
 
-print("Welcome to a data processing application to find records of accidents\n")
-print("that occurred in the U.S. from 2016 to 2021.\n")
-print("You will need to load (1) the information first and then (2) Process\n")
-print("it before you can perform any searches on the data.")
-
-print("************************************")
+print("\nWelcome to a data processing application to find records of \n"
+    "accidents that occurred in the U.S. from 2016 to 2021.\n\n"
+    "> You will need to (1) load the information first and then\n"
+    "> (2) Process the data before you can search.\n"
+    "*****************************************************************")
 # Define global set here
 df = 0
 
@@ -38,7 +37,7 @@ def loadData():
     global df
     df = pd.DataFrame(Dataset)
     totalData = len(df)
-    print(totalData)
+    print(totalData + "error?")
 
 # CLEAN DATA
 def processData():
@@ -333,7 +332,7 @@ def searchAccidentsTime():
     yearDF = searchByYear(dayDF, year)
     if(yearChoice == 'NA'):
         return currentDF
-### need help with following line
+    ### need help with following line
     yearChoiceAccidents = df['year'] = pd.DatetimeIndex(df['Start_Time']).year == yearChoice
     yearTmpDF = df[yearChoiceAccidents]
     yearTotalAccidents = len(yearTmpDF)
