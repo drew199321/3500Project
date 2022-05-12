@@ -334,7 +334,7 @@ def printAnswers():
 def searchAccidentsPlace():
     global timeQueryOne
     print("Please type the name of the city you would like to search.\n") 
-    cityChoice = input()
+    cityChoice = input("Make sure to capilize the first letter.")
     if(cityChoice != 'NA'):
         start_time = time.time()
         cityChoiceAccidents  = df['City'] == cityChoice
@@ -349,7 +349,7 @@ def searchAccidentsPlace():
     cityTime =end_time - start_time
 
     print("Please type the name of the state you would like to search.\n") 
-    stateChoice = input()
+    stateChoice = input("Use USPS abbreviations to get an anser.")
     if(stateChoice != 'NA'):
         start_time = time.time()
         stateChoiceAccidents  = df['State'] == stateChoice
