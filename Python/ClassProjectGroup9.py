@@ -190,11 +190,23 @@ def prompt6():
     humiditySevFour = yearAndSeverity['Humidity(%)'].mean()
     # Temperature of severity 4 accidents in 2021
     tempSevFour = yearAndSeverity['Temperature(F)'].mean()
+    if (pd.isna(tempSevFour) == False):
+        print('[', datetime.now(), ']')
+        print('Average temp: ', round(tempSevFour, 3))
+    else:
+        print('[', datetime.now(), '] Unable to Find data for year, severity,'
+        'and temperature.')
+    if (pd.isna(humiditySevFour) == False):
+        print('[', datetime.now(), ']')
+        print('Average humidity: ', round(humiditySevFour, 3))
+    else:
+        print('[', datetime.now(), '] Unable to Find data for year, severity,'
+        'and humididty.')
 
     # average temperature and humidity for accidents w/ a severity of 4 in 2021
-    print('[', datetime.now(), ']')
-    print('Average humidity: ', humiditySevFour)
-    print('Average temp: ', tempSevFour)
+    # print('[', datetime.now(), ']')
+    # print('Average humidity: ', humiditySevFour)
+    # print('Average temp: ', tempSevFour)
     # print("For accidents with severity 4 that occured in 2021: ")
 
 # 7. What are the 3 most common weather conditions (weather_conditions) when accidents occurred?
@@ -448,22 +460,22 @@ def menu_selection(action):
         if(action =='1'):
             loadData()
             return False
-        if(action =='2'):
+        elif(action =='2'):
             processData()
             return False
-        if(action =='3'):
+        elif(action =='3'):
             printAnswers()
             return False
-        if(action =='4'):
+        elif(action =='4'):
             searchAccidentsPlace()
             return False
-        if(action =='5'):
+        elif(action =='5'):
             searchAccidentsTime()
             return False
-        if(action =='6'):
+        elif(action =='6'):
             searchAccidentsCondition()
             return False
-        if(action =='7'):
+        elif(action =='7'):
             totalTime = timeToLoad + timeToProcess + timeToPrompt + timeQueryOne + timeQueryTwo + timeQueryThree
             print('Total Running Time:', totalTime)
             return True
