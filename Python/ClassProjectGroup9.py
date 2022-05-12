@@ -76,18 +76,12 @@ def processData():
     df['End_Time'] = pd.to_datetime(df['End_Time'])
     df = df[df['Start_Time'] != df['End_Time']]
 
-    # # Only consider the first 5 digits of zipcode
-    # zipCoder = df['Zipcode'].str[:5]
-    # # Tested with index 21 with zipcode: 41033-9698; output: 41033
-    # print(zipCoder[21])
-
     print('[', datetime.now(), '] Total Rows Read after cleaning is:', len(df))
     end_time = time.time()
     global timeToProcess
     timeToProcess = end_time - start_time
     print('Time to process is:', round(timeToProcess, 4), '\n')
     return df, timeToProcess
-
 
 #**************************************
     # starting functions that answer the questions
@@ -190,15 +184,20 @@ def prompt6():
     humiditySevFour = yearAndSeverity['Humidity(%)'].mean()
     # Temperature of severity 4 accidents in 2021
     tempSevFour = yearAndSeverity['Temperature(F)'].mean()
+
+    # If there is data in the avg temp, give results
     if (pd.isna(tempSevFour) == False):
         print('[', datetime.now(), ']')
         print('Average temp: ', round(tempSevFour, 3))
+    # If there is no data, Let the user know.
     else:
         print('[', datetime.now(), '] Unable to Find data for year, severity,'
         'and temperature.')
+    # If there is data in the avg humidity, give results
     if (pd.isna(humiditySevFour) == False):
         print('[', datetime.now(), ']')
         print('Average humidity: ', round(humiditySevFour, 3))
+    # If there is no data, Let the user know.
     else:
         print('[', datetime.now(), '] Unable to Find data for year, severity,'
         'and humididty.')
@@ -326,15 +325,12 @@ def printAnswers():
     timeToPrompt = end_time - start_time
     return timeToPrompt
 
-
-#STILL Need to work on time in this function<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
 #**************************************
 # associated with choice 4 on menu
 def searchAccidentsPlace():
     global timeQueryOne
     print("Please type the name of the city you would like to search.\n") 
-    cityChoice = input("Make sure to capilize the first letter.")
+    cityChoice = input()
     if(cityChoice != 'NA'):
         start_time = time.time()
         cityChoiceAccidents  = df['City'] == cityChoice
@@ -349,7 +345,7 @@ def searchAccidentsPlace():
     cityTime =end_time - start_time
 
     print("Please type the name of the state you would like to search.\n") 
-    stateChoice = input("Use USPS abbreviations to get an anser.")
+    stateChoice = input()
     if(stateChoice != 'NA'):
         start_time = time.time()
         stateChoiceAccidents  = df['State'] == stateChoice
@@ -442,10 +438,7 @@ def searchAccidentsCondition():
     end_time = time.time() 
     timeQueryThree = end_time - start_time   
 
-
-
     print("The number of accidents in specified tempature and visibility range is: ")
-
     print(len(Visi))
 
 def menu_selection(action):
@@ -461,19 +454,38 @@ def menu_selection(action):
             loadData()
             return False
         elif(action =='2'):
-            processData()
+            if(timeToLoad == 0):
+                print('\n!!! PLEASE LOAD DATA BEFORE PROCESSING!!!\n')
+            else:
+                processData()
             return False
         elif(action =='3'):
-            printAnswers()
+            if(timeToLoad == 0 or timeToProcess == 0):
+                print ('\n!!! PLEASE LOAD AND PROCESS DATA'
+                    ' BEFORE LOADING ANSWERS TO PROMPTS!!!\n')
+            else:
+                printAnswers()      
             return False
         elif(action =='4'):
-            searchAccidentsPlace()
+            if(timeToLoad == 0 or timeToProcess == 0):
+                print ('\n!!! PLEASE LOAD AND PROCESS DATA'
+                    ' BEFORE SEARCHING CITY, STATE AND ZIP CODE!!!\n')
+            else:
+                searchAccidentsPlace()
             return False
         elif(action =='5'):
-            searchAccidentsTime()
+            if(timeToLoad == 0 or timeToProcess == 0):
+                print ('\n!!! PLEASE LOAD AND PROCESS DATA'
+                    ' BEFORE SEARCHING YEAR, MONTH AND DAY!!!\n')
+            else:
+                searchAccidentsTime()
             return False
         elif(action =='6'):
-            searchAccidentsCondition()
+            if(timeToLoad == 0 or timeToProcess == 0):
+                print ('\n!!! PLEASE LOAD AND PROCESS DATA'
+                    ' BEFORE SEARCHING TEMPERATURE RANGE AND VISIBILITY!!!\n')
+            else:
+                searchAccidentsCondition()
             return False
         elif(action =='7'):
             totalTime = timeToLoad + timeToProcess + timeToPrompt + timeQueryOne + timeQueryTwo + timeQueryThree
