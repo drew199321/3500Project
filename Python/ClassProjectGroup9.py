@@ -33,6 +33,8 @@ timeToLoad = 0
 timeToProcess = 0
 timeToPrompt = 0
 timeQueryOne = 0
+timeQueryTwo = 0
+timeQueryThree = 0
 
 def loadData():
     start_time = time.time()
@@ -369,6 +371,7 @@ def searchAccidentsPlace():
 
 ############################################################################
 def searchAccidentsTime():
+    global timeQueryTwo
     print("You will be given the opportunity to search by month, day, and year.\n")
     print("If you only want to limit your search by one or two factors,  \n")  
     print("type: NA, when given those options.")
@@ -382,32 +385,50 @@ def searchAccidentsTime():
         else:
             if(yearChoice == 'NA'):
                 dfYear = df
+
+                yearTime = 0
             else:
+                start_time = time.time()
                 dfYear = df[df['Start_Time'].dt.year.eq(int(yearChoice))]
+                end_time = time.time()
+                yearTime = end_time - start_time
             if(monthChoice == 'NA'):
+
                 dfMonth = dfYear 
+                monthTime = 0
             else:
+                start_time = time.time()
                 dfMonth = dfYear[dfYear['Start_Time'].dt.month.eq(int(monthChoice))]
+                end_time = time.time()
+                monthTime = end_time - start_time
             if(dayChoice == 'NA'):
                 dfDay = dfMonth
+                dayTime = 0
             else:
+                start_time = time.time()
                 dfDay = dfMonth[dfMonth['Start_Time'].dt.day.eq(int(dayChoice))]
+                end_time = time.time()
+                dayTime = end_time - start_time
 
+            timeQueryTwo = dayTime + monthTime + yearTime
             print("The number of accidents in this timeframe is: ")
             print(len(dfDay))
+
     except:
         print("An error has occurred. Please enter a valid input and try again.")
 
 
-
-
 def searchAccidentsCondition():
-    minTemp = float(input("input the lowest temperture of the range"))
-    maxTemp = float(input("input the highest temperture of the range"))
-    minVisibility = float(input("input the lowest visibility of the range"))
-    maxVisibility = float(input("input the  farthest visibility of the range"))
+    global timeQueryThree
+    minTemp = float(input("input the lowest temperture of the range: "))
+    maxTemp = float(input("input the highest temperture of the range: "))
+    minVisibility = float(input("input the lowest visibility of the range: "))
+    maxVisibility = float(input("input the  farthest visibility of the range: "))
+    start_time = time.time()
     temperature = df[df['Temperature(F)'].between(minTemp,maxTemp, inclusive=True)]
     Visi = temperature[temperature['Visibility(mi)'].between(minVisibility,maxVisibility, inclusive=True)]
+    end_time = time.time() 
+    timeQueryThree = end_time - start_time   
 
 
 
@@ -420,6 +441,8 @@ def menu_selection(action):
     global timeToPrompt
     global timeToProcess
     global timeQueryOne
+    global timeQueryTwo
+    global timeQueryThree
 
     try:
         if(action =='1'):
@@ -441,11 +464,14 @@ def menu_selection(action):
             searchAccidentsCondition()
             return False
         if(action =='7'):
-            totalTime = timeToLoad + timeToProcess + timeToPrompt + timeQueryOne
+            totalTime = timeToLoad + timeToProcess + timeToPrompt + timeQueryOne + timeQueryTwo + timeQueryThree
             print('Total Running Time:', totalTime)
             return True
-    except ValueError:
-        print("Error: Invalid input. Please try again.")
+        else:
+            print("Invalid input. Please try again.")
+            return False
+    except:
+        print("An error has occurred. Please check that data is loaded and try again.")
         return False
 
 # definition for main
