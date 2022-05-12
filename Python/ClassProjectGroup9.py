@@ -14,6 +14,7 @@
 import sys
 import warnings
 import csv
+from xml.dom import ValidationErr
 from numpy import average
 import pandas as pd
 from datetime import datetime
@@ -28,6 +29,10 @@ print("\nWelcome to a data processing application to find records of \n"
         "*****************************************************************")
 # Define global set here
 df = 0
+timeToLoad = 0
+timeToProcess = 0
+timeToPrompt = 0
+timeQueryOne = 0
 
 def loadData():
     start_time = time.time()
@@ -41,10 +46,10 @@ def loadData():
     print('[', datetime.now(), '] Total Columns Read:', len(df.columns)) 
     print('[', datetime.now(), '] Total Rows Read:', len(df))
     end_time = time.time()
-    global time_to_load
-    time_to_load = end_time - start_time
-    print ('Time to load is:', round(time_to_load, 4), 'seconds\n')
-    return time_to_load
+    global timeToLoad
+    timeToLoad = end_time - start_time
+    print ('Time to load is:', round(timeToLoad, 4), 'seconds\n')
+    return timeToLoad
 
 # CLEAN DATA
 def processData():
@@ -76,10 +81,10 @@ def processData():
 
     print('[', datetime.now(), '] Total Rows Read after cleaning is:', len(df))
     end_time = time.time()
-    global time_to_process
-    time_to_process = end_time - start_time
-    print('Time to process is:', round(time_to_process, 4), '\n')
-    return df, time_to_process
+    global timeToProcess
+    timeToProcess = end_time - start_time
+    print('Time to process is:', round(timeToProcess, 4), '\n')
+    return df, timeToProcess
 
 
 #**************************************
@@ -291,7 +296,7 @@ def prompt10():
 
 #**************************************
 def printAnswers():
-    global time_to_prompt
+    global timeToPrompt
     start_time = time.time()
     prompt1()
     prompt2()
@@ -304,8 +309,8 @@ def printAnswers():
     prompt9()
     prompt10()
     end_time = time.time()
-    time_to_prompt = end_time - start_time
-    return time_to_prompt
+    timeToPrompt = end_time - start_time
+    return timeToPrompt
 
 
 #STILL Need to work on time in this function<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -313,7 +318,7 @@ def printAnswers():
 #**************************************
 # associated with choice 4 on menu
 def searchAccidentsPlace():
-    global time_query_one
+    global timeQueryOne
     print("Please type the name of the city you would like to search.\n") 
     cityChoice = input()
     if(cityChoice != 'NA'):
@@ -358,9 +363,9 @@ def searchAccidentsPlace():
     print(zipTotalAccidents)
     end_time = time.time()
     zipTime = end_time - start_time
-    time_query_one = cityTime + stateTime + zipTime
-    print("Time for place search : ", time_query_one)
-    return time_query_one
+    timeQueryOne = cityTime + stateTime + zipTime
+    print("Time for place search : ", timeQueryOne)
+    return timeQueryOne
 
 ############################################################################
 def searchAccidentsTime():
@@ -386,7 +391,7 @@ def searchAccidentsTime():
             if(dayChoice == 'NA'):
                 dfDay = dfMonth
             else:
-                dfDay = dfDay[dfMonth['Start_Time'].dt.day.eq(int(dayChoice))]
+                dfDay = dfMonth[dfMonth['Start_Time'].dt.day.eq(int(dayChoice))]
 
             print("The number of accidents in this timeframe is: ")
             print(len(dfDay))
@@ -411,6 +416,10 @@ def searchAccidentsCondition():
     print(len(Visi))
 
 def menu_selection(action):
+    global timeToLoad
+    global timeToPrompt
+    global timeToProcess
+    global timeQueryOne
 
     try:
         if(action =='1'):
@@ -432,10 +441,10 @@ def menu_selection(action):
             searchAccidentsCondition()
             return False
         if(action =='7'):
-            total_time = time_to_load + time_to_process + time_to_prompt + time_query_one
-            print('Total Running Time:', total_time)
+            totalTime = timeToLoad + timeToProcess + timeToPrompt + timeQueryOne
+            print('Total Running Time:', totalTime)
             return True
-    except:
+    except ValueError:
         print("Error: Invalid input. Please try again.")
         return False
 
@@ -443,7 +452,7 @@ def menu_selection(action):
 loaded = False
 
 def main(): 
-    # years = df['years'] = pd.DatetimeIndex(df['Start_Time']).year
+
     global loaded
     exit = False
     while(exit == False):
