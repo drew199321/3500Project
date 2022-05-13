@@ -432,7 +432,7 @@ def searchAccidentsPlace():
 
     # Prompt user for zipcode
     print("\n\u001b[36mPlease type the zip code you would like to search."
-        "\nFormat: 12345\u001b[0m\n") 
+        "\nFormat: 12345\u001b[0m") 
     
     # Store their choice
     zipChoice = input()
@@ -455,7 +455,7 @@ def searchAccidentsPlace():
 
     # Get the acumulated time of the user's location queries
     timeQueryOne = cityTime + stateTime + zipTime
-    print("Time for location search : \u001b[32m", round(timeQueryOne, 4), 
+    print("\nTime for location search : \u001b[32m", round(timeQueryOne, 4), 
         '\u001b[0m\n')
     return timeQueryOne
 
