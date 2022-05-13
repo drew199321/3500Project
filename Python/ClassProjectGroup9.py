@@ -31,7 +31,7 @@ print("\033[1;32m\nWelcome to a data processing application to find records of \
         "You will need to (1) load the information first and then\n"
         "(2) Process the data before you can search.\n"
         "**********************************************************************"
-        "\u001b[0m")
+        "***\u001b[0m")
 # Define global set here
 df = 0
 timeToLoad = 0
@@ -67,7 +67,7 @@ def processData():
     # Drop rows with missing data from any of the specified columns
     global df
     print("\033[1;32mProcessing and cleaning input data set:")
-    print("************************************\u001b[0m")
+    print("******************************************************\u001b[0m")
     print('[', datetime.now(), '] Performing Data Cleanup')
 
     # drops all rows with data missing in specified columns
@@ -373,9 +373,15 @@ def printAnswers():
 # Give the user the ability to search for accidents in city, state, and zip
 def searchAccidentsPlace():
     global timeQueryOne
+
+    print("\n\u001b[34mYou will be given the opportunity to search by city, "
+        "state, or zip code.")
+    print("********************************************************************"
+        "\u001b[0m")
+
     # Ask user for city
-    print("\u001b[36mPlease type the name of the city you would like to"
-        "search.\u001b[0m") 
+    print("\n\u001b[36mPlease type the name of the city you would like to"
+        " search.\u001b[0m") 
     # Store their input and capitalize the first letter in each word
     cityChoice = input().title()
     
@@ -386,15 +392,21 @@ def searchAccidentsPlace():
     else: 
         start_time = time.time()
         cityChoiceAccidents = df
+    # Get the user's choice and store in temp dataframe
     cityTmpDF = df[cityChoiceAccidents]
+    # Get the total rows of accidents in that city
     cityTotalAccidents = len(cityTmpDF)
-    print("The number of accidents in \u001b[35m" + cityChoice + "\u001b[0m was:")
+
+    # Print results
+    print("\nThe number of accidents in \u001b[35m" + cityChoice + "\u001b[0m was:")
     print('\033[1;32m', cityTotalAccidents, '\u001b[0m')
     end_time = time.time()
-    cityTime =end_time - start_time
+
+    # store time to process cityTime
+    cityTime = end_time - start_time
 
     # Prompt user to choose a state
-    print("\u001b[36mPlease type the name of the state you would like to search."
+    print("\n\u001b[36mPlease type the name of the state you would like to search."
         "\nFormat: CA, NV, WA, etc.\u001b[0m") 
     
     # Store their choice and convert to uppercase to match dataframe
@@ -405,7 +417,11 @@ def searchAccidentsPlace():
     else:
         start_time = time.time()
         stateChoiceAccidents = df 
+    
+    # store the user's state choice in temp dataframe
     stateTmpDF = df[stateChoiceAccidents]
+
+    # Get total rows of the state choice
     stateTotalAccidents = len(stateTmpDF)
 
     # Print results
@@ -415,7 +431,7 @@ def searchAccidentsPlace():
     stateTime = end_time - start_time
 
     # Prompt user for zipcode
-    print("\u001b[36mPlease type the zip code you would like to search."
+    print("\n\u001b[36mPlease type the zip code you would like to search."
         "\nFormat: 12345\u001b[0m\n") 
     
     # Store their choice
@@ -436,11 +452,14 @@ def searchAccidentsPlace():
     print('\033[1;32m', zipTotalAccidents, '\u001b[0m')
     end_time = time.time()
     zipTime = end_time - start_time
+
+    # Get the acumulated time of the user's location queries
     timeQueryOne = cityTime + stateTime + zipTime
-    print("Time for location search : \u001b[32m", timeQueryOne, '\u001b[0m\n')
+    print("Time for location search : \u001b[32m", round(timeQueryOne, 4), 
+        '\u001b[0m\n')
     return timeQueryOne
 
-############################################################################
+# searchAccidents time will give the total number of accidents in the US on any day 
 def searchAccidentsTime():
     global timeQueryTwo
     print("\n\u001b[34mYou will be given the opportunity to search by month, "
@@ -450,18 +469,24 @@ def searchAccidentsTime():
     print("********************************************************************"
         "\u001b[0m")
 
-    yearChoice = input("\u001b[36mPlease type the year between 2016 and 2021: "
+    # Get the year from user
+    yearChoice = input("\n\u001b[36mPlease type the year between 2016 and 2021: "
         "\u001b[0m")
+    
+    # Get the month from user
     monthChoice = input("\u001b[36mPlease type the month as integer (Jan is 1,"
         "Feb is 2, etc.): \u001b[0m")
+
+    # Get the day from user
     dayChoice = input("\u001b[36mPlease type the day: \u001b[0m")
+
+    # try / except will make sure all the fields had values
     try:
         if(yearChoice == monthChoice == dayChoice == 'NA'):
             print("\u001b[31mError: All fields entered as NA\u001b[0m")
         else:
             if(yearChoice == 'NA'):
                 dfYear = df
-
                 yearTime = 0
             else:
                 start_time = time.time()
@@ -485,44 +510,63 @@ def searchAccidentsTime():
                 end_time = time.time()
                 dayTime = end_time - start_time
 
+            # Get the accumulated time of the users' time query
             timeQueryTwo = dayTime + monthTime + yearTime
 
+            # Format Output based on input
             if (dayChoice != 'NA' and monthChoice != 'NA' and 
                 yearChoice != 'NA'):
+
+                # print in mm/dd/yyyy format
                 print(f'The number of accidents on \u001b[35m{monthChoice}/' + 
                     f'{dayChoice}/{yearChoice}\u001b[0m is:')
                 print('\u001b[32m', len(dfDay), '\u001b[0m\n')
-            else: 
+            else:
+                # print generic time frame if any field is NA 
                 print("The number of accidents in this timeframe is: ")
                 print('\u001b[32m', len(dfDay), '\u001b[0m\n')
 
     except:
         print("An error has occurred. Please enter a valid input and try again.")
 
-
+# searchAccidentsCondition will find accidents within temp and visibility ranges
 def searchAccidentsCondition():
     global timeQueryThree
+    # Get minimum temp from user
     minTemp = float(input("\n\u001b[36mInput the lowest temperature of the" 
-        "range in \u2109 :\u001b[0m "))
+        " range in \u2109 :\u001b[0m "))
+
+    # Get maximum temp from user
     maxTemp = float(input("\u001b[36mInput the highest temperature of the range "
         " in \u2109 :\u001b[0m "))
+    
+    # Get minimum visibility from user
     minVisibility = float(input("\u001b[36mInput the lowest visibility of the "
         "range (0-10) in miles:\u001b[0m "))
+    
+    # Get maximum visibility from user
     maxVisibility = float(input("\u001b[36mInput the farthest visibility of "
         "the range (0-10) in miles:\u001b[0m "))
     start_time = time.time()
+    # Get the temp from dataframe
     temperature = df[df['Temperature(F)'].between(minTemp, maxTemp, inclusive=True)]
+
+    # Store the queries in Visi
     Visi = temperature[temperature['Visibility(mi)'].between(minVisibility,maxVisibility, inclusive=True)]
     end_time = time.time() 
     timeQueryThree = end_time - start_time   
 
+    # print results 
     print('\nThe number of accidents with temperature between\u001b[35m', 
         minTemp,'\u2109\u001b[0m  and \u001b[35m', maxTemp,'\u2109\u001b[0m'
             '\nand visibility between\u001b[35m', minVisibility,'mi\u001b[0m  '
             'and \u001b[35m', maxVisibility, 'mi\u001b[0m is:')
     print('\u001b[32m', len(Visi), '\u001b[0m\n')
 
-def menu_selection(action):
+# menuSelection provides ability to load & process data, see results of prompts
+# and search through the dataframe
+def menuSelection(action):
+    # Define global time variables
     global timeToLoad
     global timeToPrompt
     global timeToProcess
@@ -530,55 +574,72 @@ def menu_selection(action):
     global timeQueryTwo
     global timeQueryThree
 
+    # Based on integer input, the user can navigate the options
     try:
         if(action =='1'):
+            # load data into the dataframe
             loadData()
             return False
+        
         elif(action =='2'):
+            # If the user hasn't loaded the data yet, don't process data 
             if(timeToLoad == 0):
                 print('\u001b[31m\n!!!PLEASE LOAD DATA BEFORE PROCESSING!!!'
                     '\u001b[0m\n')
             else:
+                # Process the data after it's loaded
                 processData()
             return False
         elif(action =='3'):
+            # If the data hasn't been loaded or processed, don't load prompts
             if(timeToLoad == 0 or timeToProcess == 0):
                 print ('\u001b[31m\n!!! PLEASE LOAD AND PROCESS DATA'
                     ' BEFORE LOADING ANSWERS TO PROMPTS!!!\u001b[0m\n')
             else:
+                # Load the prompts and print answers
                 printAnswers()      
             return False
         elif(action =='4'):
+            # If the data hasn't been loaded or processed, don't search
             if(timeToLoad == 0 or timeToProcess == 0):
                 print ('\u001b[31m\n!!!PLEASE LOAD AND PROCESS DATA'
                     ' BEFORE SEARCHING CITY, STATE AND ZIP CODE!!!\u001b[0m\n')
             else:
+                # Search data for city, state, or Country
                 searchAccidentsPlace()
             return False
         elif(action =='5'):
+            # If the data hasn't been loaded or processed, don't search
             if(timeToLoad == 0 or timeToProcess == 0):
                 print ('\u001b[31m\n!!!PLEASE LOAD AND PROCESS DATA'
                     ' BEFORE SEARCHING YEAR, MONTH AND DAY!!!\u001b[0m\n')
             else:
+                # Search data for day, month, year
                 searchAccidentsTime()
             return False
         elif(action =='6'):
             if(timeToLoad == 0 or timeToProcess == 0):
+                # If the data hasn't been loaded or processed, don't search
                 print ('\u001b[31m\n!!! PLEASE LOAD AND PROCESS DATA'
                     ' BEFORE SEARCHING TEMPERATURE RANGE AND VISIBILITY!!!'
                     '\u001b[0m\n')
             else:
+                # Search temperature and visibility range
                 searchAccidentsCondition()
             return False
         elif(action =='7'):
+            # Print the running total of time to process all the data and queries
             totalTime = timeToLoad + timeToProcess + timeToPrompt + timeQueryOne + timeQueryTwo + timeQueryThree
             print('Total Running Time:\u001b[32m', round(totalTime, 4), 
                 '\u001b[0mseconds')
+            # Exit program
             return True
         else:
+            # If the user puts anything but an integer between 1 and 7 throw error
             print("\u001b[31mInvalid input. Please try again.\u001b[0m")
             return False
     except:
+        # Throw error if they press CTRL + C
         print("\u001b[31mAn error has occurred. Please check that data is "
             "loaded and try again.\u001b[0m")
         return False
@@ -590,21 +651,28 @@ def main():
 
     global loaded
     exit = False
+    # Load Menu while until they press 7
     while(exit == False):
-        print("Please enter the number of a prompt from the following menu:")
+        # Menu header
+        print("\u001b[35m\n****************************************************"
+            "*********************")
+        print("*\t\t\t\tMENU\t\t\t\t\t*")
+        print("****************************************************************"
+            "*********\u001b[0m")
+        # Print options
         print("1: Load  the data")
         print("2: Process the data")
         print("3: Print the answers to the questions")
         print("4: Search accidents by place (city, state, zip)") 
         print("5: Search accidents by time(year, month, day)")
         print("6: Search accidents by conditions (temperature range and"
-        "visibility range)")
+        " visibility range)")
         print("7: Quit")
         try:
             action = str(input())
-            exit = menu_selection(action)
+            exit = menuSelection(action)
         except:
             print("An error has occurred. Please check that data is loaded and"
-                "try again")
+                " try again")
 # start of main program
 main()
